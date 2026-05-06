@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@font-face {
+    font-family: Avant;
+    src: url("src/assets/fonts/itc-avant-garde-std-md.ttf") format("truetype");
+}
+@font-face {
+    font-family: Tiro;
+    src: url("src/assets/fonts/TiroBangla-Italic.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: DMSans;
+    src: url("src/assets/fonts/DMSans-VariableFont_opsz,wght.ttf") format("truetype");
+}
+
+@theme {
+    --font-avant: Avant, "sans-serif";
+    --font-tiro: Tiro, "sans-serif";
+    --font-DMSans: DMSans, "sans-serif";
+    --color-interiqoGreen: #00FFD1;
+    --color-interiqoGLight: #99FFED;
+}
