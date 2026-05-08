@@ -10,7 +10,7 @@ export default function ClientInvite (){
     const [email, setEmail] = useState("")
 
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault()
         await sendInvite(firstName, lastName, email)
     }
@@ -23,7 +23,9 @@ export default function ClientInvite (){
                     <h1 className="text-2xl font-avant">Send a Client Invite</h1>
                     <p className="font-DMSans text-gray-400 ">Send an invite link to your client to start a project</p>
                 </div>
-                <form className="flex flex-col gap-3">
+                <form                     
+                onSubmit={handleSubmit} 
+                className="flex flex-col gap-3">
                     <div className="flex gap-2">
                         <input 
                         value={firstName}
@@ -45,9 +47,8 @@ export default function ClientInvite (){
                     className="w-full border border-gray-200 rounded-lg p-2 text-sm" 
                     type="email" />
                     <button 
-                    onClick={handleSubmit} 
                     className="w-full bg-black text-white rounded-lg py-2.5 text-sm font-medium mt-1"
-                    type="button"
+                    type="submit"
                     >
                         Send invite
                     </button>

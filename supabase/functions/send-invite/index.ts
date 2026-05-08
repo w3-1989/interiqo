@@ -1,3 +1,6 @@
+import { createClient, SupabaseClient} from "@supabase/supabase-js";
+
+
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -7,14 +10,34 @@ console.log(`Function "browser-with-cors" up and running!`)
 const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
 
 
+const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
+const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+
+const supabase:SupabaseClient = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
+
+
 Deno.serve(async (req) => {
   // This is needed if you're planning to invoke your function from a browser.
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
+
+  
+
   try {
-    
-    const { email } = await req.json()
+    const { firstName, email } = await req.json()
+    const token = crypto.randomUUID()
+
+   const {error} = await supabase
+      .from('invite')
+      .insert({
+        email: email,
+        token: token ,
+        claimed: false,
+      })
+      console.log(error)
+
+      if(error) throw error
     const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
@@ -24,8 +47,11 @@ Deno.serve(async (req) => {
     body: JSON.stringify({
       from: 'Interiqo <team@interiqo.com>',
       to: [email],
-      subject: 'hello world',
-      html: '<strong>it works!</strong>',
+      subject: 'Urgent: You have been invited to start a project!',
+      html: `
+      <strong>${firstName} you have been invited to start a project</strong>
+      <a href="https://www.interiqo.com/discovery?token=${token}">Click here to start</a>
+      `
     }),
   });
 
@@ -43,5 +69,4 @@ Deno.serve(async (req) => {
     })
   }
 })
-
 
