@@ -1,4 +1,4 @@
-import { supabase } from "../supabaseClient";
+import { supabase } from "../../supabaseClient";
 
 
 export default async function sendInvite (firstName: string, lastName: string, email: string){

@@ -5,7 +5,7 @@ as a URL param from DiscoveryChat to ensure the correct conversation brief
 is generated and stored.
 */
 
-import callBrief from "../../lib/api/callBrief";
+import callBrief from "../../lib/api/Client/callBrief"
 import { supabase } from "../../lib/supabaseClient"
 import { useEffect, useState } from "react"
 import ReactMarkdown from 'react-markdown'

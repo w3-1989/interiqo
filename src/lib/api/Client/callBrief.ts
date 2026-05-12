@@ -1,5 +1,5 @@
-import { supabase } from "../supabaseClient";
-import type { Messages } from "../../types/Messages";
+import { supabase } from "../../supabaseClient";
+import type { Messages } from "../../../types/Messages";
 
 
 export default async function callBrief( messages: Messages[]){

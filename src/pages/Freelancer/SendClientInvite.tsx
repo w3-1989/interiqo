@@ -1,5 +1,5 @@
 import {  useState } from "react"
-import sendInvite from "../../lib/api/sendInvite"
+import sendInvite from "../../lib/api/Freelancer/sendInvite"
 
 
 

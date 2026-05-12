@@ -2,7 +2,8 @@
 Future add - database transaction or a cleanup 
 function that deletes the auth user if subsequent steps fail
 */
-import { supabase } from "../supabaseClient";
+import { supabase } from "../../supabaseClient";
+import type { Client } from "../../../types/Client";
 
 
 export default async function createClientAcc (email: string, organisation: string, password: string, token:string){
@@ -52,7 +53,7 @@ export default async function createClientAcc (email: string, organisation: stri
         email: email,
         organisation: organisation,
     })
-    .select('id')
+    .select('id').returns<Client[]>()
 
     if(errorInsertClientData){
         console.log("createClientAcc - Could not insert user data", errorInsertClientData)

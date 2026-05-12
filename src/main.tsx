@@ -10,11 +10,13 @@ import DiscoveryChat from './pages/Client/DiscoveryChat.tsx'
 import ConfirmProjectReport from './pages/Client/ConfirmProjectReport.tsx'
 import ClientDashboard from './pages/Client/ClientDashboard.tsx'
 import FreelancerDashboard from "./pages/Freelancer/FreelancerDashboard.tsx"
+import FreelancerAccountSetup from './pages/Freelancer/FreelancerAccountSetup.tsx'
 
 const router = createBrowserRouter([
   {path: "/", element: <App/>},
   {path: "/send-client-invite", element: <SendClientInvite/>},
   {path: "/client-account-setup", element: <ClientAccountSetup/>},
+  {path: "/freelancer-account-setup", element:<FreelancerAccountSetup/>},
   {path: "/discovery-chat", element: <DiscoveryChat/>},
   {path: "/confirm-project-report", element:<ConfirmProjectReport/>},
   {path: "/client-dashboard", element:<ClientDashboard/>},

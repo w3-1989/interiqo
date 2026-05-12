@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import type { Messages } from "../../types/Messages"
-import callDiscoveryChat from "../../lib/api/callDiscoveryChat";
+import callDiscoveryChat from "../../lib/api/Client/callDiscoveryChat";
 import ReactMarkdown from 'react-markdown'
 import { supabase } from "../../lib/supabaseClient";
 import { useNavigate } from "react-router-dom";
