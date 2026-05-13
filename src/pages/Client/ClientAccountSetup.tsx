@@ -3,16 +3,19 @@ import { supabase } from "../../lib/supabaseClient";
 import { useEffect, useState } from "react";
 import createClientAcc from "../../lib/api/Client/createClientAcc"
 import passwordValidation from "../../utils/passwordValidation"
+import TopBarSimple from "../../components/General/TopBarSimple";
+import Background from "../../assets/backgrounds/GeometricBG.svg?react"
+import { X, Check, Lock} from "lucide-react"
 import clsx from "clsx";
 
 const passwordValidationStyle = {
-    default: "text-gray-400 text-sm",
+    default: "text-interiqo-black-200 text-sm",
     passed: "text-green-400 text-sm"
 }
 
 const submitBtnStyles ={
-    default: "w-full bg-gray-400 text-white rounded-lg py-2.5 text-sm font-medium mt-1",
-    active: "w-full bg-black text-white rounded-lg py-2.5 text-sm font-medium mt-1 "
+    default: "flex min-h-[48px] cursor-pointer justify-center items-center  w-full bg-interiqo-purple-500 text-white py-2.5 text-sm font-DMSans  mt-1",
+    active: "flex min-h-[48px] cursor-pointer justify-center items-center  w-full bg-interiqo-purple-400 text-white py-2.5 text-sm font-DMSans mt-1"
 }
 
 export default function ClientAccountSetup(){
@@ -85,69 +88,91 @@ export default function ClientAccountSetup(){
 
   return (
     <>
-    <section className="h-screen flex flex-col justify-center items-center bg-gray-100">
-            <div className="flex flex-col w-120 h-120 rounded-2xl gap-6 bg-white drop-shadow-md  p-5">
-                 <div className="flex flex-col text-center mt-6">
-                    <h1 className="text-2xl font-avant">Create your account</h1>
-                    <p className="font-DMSans text-gray-400 ">Please enter your details below</p>
+    <div className="h-screen flex flex-col dark:bg-interiqo-black-500">
+    <Background className="absolute  h-screen opacity-20"/>
+     <TopBarSimple/>
+    <section className="h-screen flex flex-col justify-center items-center">
+            <div className="h-full flex flex-col justify-center items-center -mt-16">
+                 <div className="flex flex-col ">
                 </div>
                 <form                     
                 onSubmit={handleSubmit} 
-                className="flex flex-col gap-3">
+                className="flex w-[471.3px] flex-col gap-8">
+                    <label className="flex flex-col gap-8 font-DMSans dark:text-white"> Email
+                        <div className="relative">
                         <input 
-                        value={email}
-                        placeholder={email} 
-                        className="flex-1 min-w-0 border border-gray-200 rounded-lg p-2 text-sm" 
-                        disabled
-                        type="text" />
-
+                            value={email}
+                            placeholder={email} 
+                            className=" flex-1 min-w-full  border-b border-black dark:border-white p-2 text-sm font-DMSans" 
+                            disabled
+                            type="text" />
+                            <Lock size={16} className="absolute right-2 top-1/2 -translate-y-1/2"/>
+                        </div>
+                        
+                    </label>
+                    <label className="flex flex-col gap-8 font-DMSans dark:text-white">Organisation
                         <input 
                         value={organisation} 
                         onChange={e => setOrganisation(e.target.value)}
-                        placeholder="Organisation name " 
-                        className="flex-1 min-w-0 border border-gray-200 rounded-lg p-2 text-sm" 
+                        required
+                        className="flex-1 min-w-0 border-b border-black dark:border-white p-2 text-sm font-DMSans" 
                         type="text" />
-
+                    </label>
+                     <label className="flex flex-col gap-8 font-DMSans dark:text-white">Password
                         <input 
                         value={password}
+                        required
                         onChange={(e) => {
                             setPassword(e.target.value)
                             setPasswordCheck(passwordValidation(e.target.value))
                         }}
-                        placeholder="Create password" 
-                        className="w-full border border-gray-200 rounded-lg p-2 text-sm" 
+                        className="flex-1 min-w-0 border-b border-black dark:border-white p-2 text-sm font-DMSans" 
                         type="password" />
                         <div className="flex flex-col gap-2"> 
+                            <div className="flex flex-row items-center gap-2">
+                            {passwordCheck.minLength ? <Check size={15} color="#5805FF"/> : <X size={15} color="#4C4C4C"/> }
                             <p className={clsx(
                                 passwordValidationStyle.default, 
                                 passwordCheck.minLength && passwordValidationStyle.passed
                             )}>Minimum 8 characters</p>
+                            </div>
 
+                            <div className="flex flex-row items-center gap-2">
+                            {passwordCheck.containsNum ? <Check size={15} color="#5805FF"/> : <X size={15} color="#4C4C4C"/> }
                             <p className={clsx(
                                 passwordValidationStyle.default, 
                                 passwordCheck.containsNum && passwordValidationStyle.passed
                             )}>Must contain one number</p>
+                            </div>
+
+                            <div className="flex flex-row items-center gap-2">
+                            {passwordCheck.containsUppercaseLetter ? <Check size={15} color="#5805FF"/> : <X size={15} color="#4C4C4C"/> }
                             <p className={clsx(
                                 passwordValidationStyle.default, 
                                 passwordCheck.containsUppercaseLetter && passwordValidationStyle.passed
                             )}>Must contain one uppercase letter</p>
+                            </div>
+                            <div className="flex flex-row items-center gap-2">
+                            {passwordCheck.containsSpecialCharacter ? <Check size={15} color="#5805FF"/> : <X size={15} color="#4C4C4C"/> }
                             <p className={clsx(
                                 passwordValidationStyle.default, 
                                 passwordCheck.containsSpecialCharacter && passwordValidationStyle.passed
                             )}>Must contain one symbol</p>
+                            </div>
                         </div>
-
+                      </label>      
                     <button 
                     className={clsx( Object.values(passwordCheck).every(value => value === true) 
                         && submitBtnStyles.active ? submitBtnStyles.active : submitBtnStyles.default)}
                     type="submit"
                     disabled={ !Object.values(passwordCheck).every(value => value === true)}
                     >
-                        Begin Discovery
+                        Create Account
                     </button>
                 </form>
             </div>
         </section>
+    </div>    
     </>
   );
 }

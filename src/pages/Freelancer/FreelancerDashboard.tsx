@@ -1,4 +1,4 @@
-import TopBar from "../../components/Freelancer/TopBar"
+import TopBar from "../../components/Shared/TopBar"
 import MainNav from "../../components/Freelancer/MainNav"
 import SendClientInvite from "../../components/Freelancer/SendClientInviteForm"
 import Background from "../../assets/backgrounds/GeometricBG.svg?react"
