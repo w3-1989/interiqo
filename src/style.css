@@ -1,4 +1,7 @@
 @import "tailwindcss";
+@source inline("bg-interiqoPurpleShade scale-110");
+@variant dark (&:where(.dark, .dark *));
+
 
 @font-face {
     font-family: Avant;
@@ -14,10 +17,40 @@
     src: url("src/assets/fonts/DMSans-VariableFont_opsz,wght.ttf") format("truetype");
 }
 
+@keyframes draw {
+  from {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+  }
+  to {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-draw {
+  animation: draw 1.6s ease forwards;
+}
+
 @theme {
+    
     --font-avant: Avant, "sans-serif";
     --font-tiro: Tiro, "sans-serif";
     --font-DMSans: DMSans, "sans-serif";
-    --color-interiqoGreen: #00FFD1;
-    --color-interiqoGLight: #99FFED;
+    --color-tooltip: #4C4C4C;
+    --color-interiqo-purple-100: #AD85FF;
+    --color-interiqo-purple-200: #8E56FF;
+    --color-interiqo-purple-300: #6A20FF;
+    --color-interiqo-purple-400: #5805FF;
+    --color-interiqo-purple-500: #4901DA;
+    --color-interiqo-purple-600: #3F01BC;
+    --color-interiqo-purple-700: #34009D;
+    --color-interiqo-purple-800: #2B0080;
+    --color-interiqo-purple-900: #220163;
+    --color-interiqo-black-100: #7F7F7F;
+    --color-interiqo-black-200: #666666;
+    --color-interiqo-black-300: #4C4C4C;
+    --color-interiqo-black-400: #191919;
+    --color-interiqo-black-500: #000000;
+    
 }

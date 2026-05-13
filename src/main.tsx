@@ -2,8 +2,8 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import { createBrowserRouter, RouterProvider} from 'react-router-dom'
-import SendClientInvite from './pages/Freelancer/SendClientInvite.tsx'
 import NotFoundPage from './pages/NotFoundPage.tsx'
+import { ThemeProvider } from './context/ThemeProvider.tsx'
 import "./style.css"
 import ClientAccountSetup from './pages/Client/ClientAccountSetup.tsx'
 import DiscoveryChat from './pages/Client/DiscoveryChat.tsx'
@@ -14,7 +14,6 @@ import FreelancerAccountSetup from './pages/Freelancer/FreelancerAccountSetup.ts
 
 const router = createBrowserRouter([
   {path: "/", element: <App/>},
-  {path: "/send-client-invite", element: <SendClientInvite/>},
   {path: "/client-account-setup", element: <ClientAccountSetup/>},
   {path: "/freelancer-account-setup", element:<FreelancerAccountSetup/>},
   {path: "/discovery-chat", element: <DiscoveryChat/>},
@@ -25,7 +24,9 @@ const router = createBrowserRouter([
 ])
 
 createRoot(document.getElementById('root')!).render(
+  <ThemeProvider>
   <StrictMode>
     <RouterProvider router={router}/>
   </StrictMode>
+  </ThemeProvider>
 )
