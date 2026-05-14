@@ -1,14 +1,4 @@
-// supabase blocks createn of conversation because of relation through foreighn key
-// conversaton cannot be created because userid do not exist
 
-//table city
-//id | name
-//1 | london
-
-//table user
-//id|name|city_id
-//1|John|1
-//1|Ann| 2 X-> error
 
 import { useContext, useState } from "react";
 import TopBarSimple from "../../components/General/TopBarSimple";
