@@ -15,7 +15,6 @@ export default function DiscoveryChat (){
     const [chat, setChat] = useState<Messages[]>([])
     const [userInputValue, setUserInputValue] = useState('')
     const [loading, setLoading] = useState(false)
-    const [latestResponse, setLatestResponse] = useState('')
     const [conversationId, setConversationId] = useState(null)
     const [submitProject, setSubmitProject] = useState(true)
     const [clientName, setClientName] = useState('')
@@ -95,7 +94,6 @@ export default function DiscoveryChat (){
         
         const currentInput = userInputValue
         setUserInputValue("")
-        setLatestResponse('')
         setTextQueue('')
         setDisplayedText('')
 
@@ -176,7 +174,7 @@ return (
         
         {(chat.length === 0 && !isStreaming) ? clientName && (
         <div className={`transition-opacity duration-700 ${clientName ? 'opacity-100' : 'opacity-0'} absolute top-1/2 left-1/2 -translate-x-1/2 top-[35%] flex flex-row items-center gap-6  ${(displayedText || isStreaming) ? 'invisible' : ''}`}>
-          {isDarkMode ? <DiamondDM className="h-20 w-auto drop-shadow-lg animate-float"/> : <DiamondLM className="h-20 w-auto drop-shadow-lg animate-float"/>}
+          {isDarkMode ? <DiamondDM className="h-20 mb-4 w-auto drop-shadow-lg animate-float"/> : <DiamondLM className="h-20 w-auto mb-4 drop-shadow-lg animate-float"/>}
           <h1 className="text-[48px] font-avant dark:text-white capitalize">{greetingMsg()}, {clientName}</h1>
         </div>): null}
 
@@ -194,7 +192,7 @@ return (
           <textarea
             className="outline-none border-none resize-none bg-transparent dark:text-white"
             value={userInputValue}
-            placeholder={latestResponse ? "Write a response..." : "Describe your project..."}
+            placeholder={chat.length > 0 ? "Write a response..." : "Describe your project..."}
             onChange={(e) => {
               setUserInputValue(e.target.value)
               setSubmitProject(true)
