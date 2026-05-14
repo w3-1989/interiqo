@@ -103,9 +103,8 @@ export default function DiscoveryChat (){
          setChat(updatedMessage)
         setLoading(true)
         setIsStreaming(true)
-        const response = await callDiscoveryChat(updatedMessage, (chunk) => {
-            setTextQueue(prev => prev + chunk.replace("SUBMIT_PROJECT", ""))
-            })
+        const response = await callDiscoveryChat(updatedMessage)
+        setTextQueue(response?.replace("SUBMIT_PROJECT", "").trim() ?? '')
         setChat([...updatedMessage, {role: "assistant" as const, content: response ?? ''}])
         setIsStreaming(false)
          const { error:errorInsertUserMessage }  = await supabase
@@ -175,11 +174,11 @@ return (
     <section className="flex-1 flex flex-col justify-center items-center">
       <div className="flex flex-col items-center gap-8 -mt-16">
         
-        {(displayedText || isStreaming) ? null : clientName && (
+        {(chat.length === 0 && !isStreaming) ? clientName && (
         <div className={`transition-opacity duration-700 ${clientName ? 'opacity-100' : 'opacity-0'} absolute top-1/2 left-1/2 -translate-x-1/2 top-[35%] flex flex-row items-center gap-6  ${(displayedText || isStreaming) ? 'invisible' : ''}`}>
           {isDarkMode ? <DiamondDM className="h-20 w-auto drop-shadow-lg animate-float"/> : <DiamondLM className="h-20 w-auto drop-shadow-lg animate-float"/>}
           <h1 className="text-[48px] font-avant dark:text-white capitalize">{greetingMsg()}, {clientName}</h1>
-        </div>)}
+        </div>): null}
 
         <div className="max-w-[648px] w-[648px] h-[364px] overflow-y-auto dark:text-white flex flex-col snap-y gap-3">
           {(displayedText || isStreaming) && (

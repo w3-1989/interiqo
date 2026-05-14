@@ -10,7 +10,6 @@ const ANTHROPIC_SECRET_KEY = Deno.env.get('ANTHROPIC_SECRET_KEY');
 
 
 Deno.serve(async (req) => {
-  // This is needed if you're planning to invoke your function from a browser.
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
@@ -51,27 +50,19 @@ Deno.serve(async (req) => {
       max_tokens: 1024,
       system: system,
       messages: messages,
-      stream: true,
     }),
   });
 
- const { readable, writable } = new TransformStream()
-res.body!.pipeTo(writable)
-
-return new Response(readable, {
+ const data = await res.json();
+return new Response(JSON.stringify(data), {
   status: 200,
-  headers: { 
-    ...corsHeaders, 
-    'Content-Type': 'text/event-stream',
-    'X-Accel-Buffering': 'no',
-    'Cache-Control': 'no-cache',
-  },
+  headers: { ...corsHeaders, 'Content-Type': 'application/json' },
 });
 
   } catch (error: unknown) {
      const message = error instanceof Error ? error.message : 'Unknown error'
     return new Response(JSON.stringify({ error: message }), {
-      headers: { ...corsHeaders, 'Content-Type': 'text/event-stream' },
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 400,
     })
   }
