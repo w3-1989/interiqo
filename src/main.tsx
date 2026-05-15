@@ -11,15 +11,18 @@ import ConfirmProjectReport from './pages/Client/ConfirmProjectReport.tsx'
 import ClientDashboard from './pages/Client/ClientDashboard.tsx'
 import FreelancerDashboard from "./pages/Freelancer/FreelancerDashboard.tsx"
 import FreelancerAccountSetup from './pages/Freelancer/FreelancerAccountSetup.tsx'
+import FreelancerLogin from './pages/Freelancer/FreelancerLogin.tsx'
+import ProtectedRoutes from './components/General/ProtectedRoute.tsx'
 
 const router = createBrowserRouter([
   {path: "/", element: <App/>},
   {path: "/client-account-setup", element: <ClientAccountSetup/>},
   {path: "/freelancer-account-setup", element:<FreelancerAccountSetup/>},
-  {path: "/discovery-chat", element: <DiscoveryChat/>},
-  {path: "/confirm-project-report", element:<ConfirmProjectReport/>},
-  {path: "/client-dashboard", element:<ClientDashboard/>},
-  {path: "/freelancer-dashboard", element:<FreelancerDashboard/> },
+  {path: "/freelancer-login", element:<FreelancerLogin/>},
+  {path: "/discovery-chat", element: <ProtectedRoutes><DiscoveryChat/></ProtectedRoutes>},
+  {path: "/confirm-project-report", element:<ProtectedRoutes><ConfirmProjectReport/></ProtectedRoutes>},
+  {path: "/client-dashboard", element:<ProtectedRoutes><ClientDashboard/></ProtectedRoutes>},
+  {path: "/freelancer-dashboard", element:<ProtectedRoutes><FreelancerDashboard/></ProtectedRoutes> },
   {path : "*", element: <NotFoundPage/>}
 ])
 

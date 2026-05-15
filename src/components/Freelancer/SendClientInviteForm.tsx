@@ -1,6 +1,7 @@
 import {  useState, useEffect, useRef } from "react"
 import { Send } from 'lucide-react'
 import sendInvite from "../../lib/api/Freelancer/sendInvite"
+import { useFreelancerData } from "../../hooks/useFreelancerData"
 
 
 
@@ -11,6 +12,8 @@ export default function SendClientInvite (){
     const [lastName, setLastName] = useState("")
     const [email, setEmail] = useState("")
     const [emailSent, setEmailSent] = useState(false)
+
+    const {freelancer_id} = useFreelancerData()
 
     const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -32,8 +35,11 @@ export default function SendClientInvite (){
     const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault()
 
+        
+
         try {
-         await sendInvite(firstName, lastName, email)
+            console.log({ freelancer_id, firstName, lastName, email })
+         await sendInvite(freelancer_id, firstName, lastName, email)
         setEmailSent(true)
 
         } catch (error) {

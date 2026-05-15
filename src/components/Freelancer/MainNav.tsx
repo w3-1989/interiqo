@@ -43,8 +43,6 @@ const navItems = [{
 
     function renderNavItems(){
         return navItems.map((item) =>{
-            console.log(activePage, item.id)
-            console.log(item.id === activePage)
 
             const Icon = item.svg
             return (

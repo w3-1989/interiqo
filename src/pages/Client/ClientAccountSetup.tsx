@@ -36,11 +36,13 @@ export default function ClientAccountSetup(){
 
     useEffect(() => {
         const fetchEmail= async () => {
+            
 
             const {data, error:errorClaimedCheck} = await supabase
             .from('invite')
             .select('email, claimed')
             .eq("token", searchParams.get("token"))
+
 
                if (errorClaimedCheck){
                 console.log("ClientAccountSetup - Error when checking to see if the email had been claimed",errorClaimedCheck)

@@ -33,13 +33,14 @@ export default async function createFreelancerAcc (firstName: string, lastName: 
         return console.log("user id cannot be found")
     } 
 
-
+    const { data: { session } } = await supabase.auth.getSession()
+console.log("Session at insert:", session)
 
 
     const { error:errorInsertFreelancerData } = await supabase
     .from('freelancers')
     .insert({
-        id: userId,
+        user_id: userId,
         first_name: firstName,
         last_name: lastName,
         email: email,

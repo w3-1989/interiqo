@@ -25,7 +25,9 @@ Deno.serve(async (req) => {
   
 
   try {
-    const { firstName, lastName, email } = await req.json()
+    const { freelancer_id, firstName, lastName, email } = await req.json()
+     console.log("freelancerId received:", freelancerId)
+
     const token = crypto.randomUUID()
 
    const {error} = await supabase
@@ -36,6 +38,7 @@ Deno.serve(async (req) => {
         last_name: lastName,
         token: token ,
         claimed: false,
+        freelancer_id: freelancer_id,
       })
       console.log(error)
 

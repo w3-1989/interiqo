@@ -43,6 +43,7 @@ export default async function createClientAcc (email: string, organisation: stri
     }
     const firstName = fetchData![0].first_name
     const lastName = fetchData![0].last_name
+    const freelancerId = fetchData![0].freelancer_id
    
    const { data: clientData, error:errorInsertClientData } = await supabase
     .from('clients')
@@ -52,6 +53,7 @@ export default async function createClientAcc (email: string, organisation: stri
         last_name: lastName,
         email: email,
         organisation: organisation,
+        freelancer_id: freelancerId,
     })
     .select('id').returns<Client[]>()
 
