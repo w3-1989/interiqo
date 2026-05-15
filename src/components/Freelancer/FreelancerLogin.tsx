@@ -1,4 +1,4 @@
-import TopBarSimple from "../../components/General/TopBarSimple";
+import TopBarSimple from "../General/TopBarSimple";
 import Background from "../../assets/backgrounds/GeometricBG.svg?react";
 import signInFreelancer from "../../lib/api/Freelancer/signInFreelancer";
 import { useState } from "react";
@@ -28,7 +28,7 @@ export default function FreelancerLogin() {
         <TopBarSimple />
         <section className="h-screen flex flex-col justify-center items-center">
           <div className="h-full flex flex-col justify-center items-center -mt-16">
-            <div className="flex flex-col "></div>
+            <h1>Freelancer Login</h1>
             <form
               onSubmit={handleSubmit}
               className="flex w-[471.3px] flex-col gap-8"
