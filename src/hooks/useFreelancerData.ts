@@ -22,8 +22,6 @@ export const useFreelancerData = () => {
       const { data: freelancerData, error: errorSelectingFreelancerData } =
         await supabase.from("freelancers").select().eq("user_id", user!.id);
 
-        console.log("user.id", user!.id)
-console.log("freelancerData", freelancerData)
 
       if (freelancerData) {
         setFreelancerId(freelancerData[0].id);

@@ -13,7 +13,7 @@ import ClientDashboard from "./pages/Client/ClientDashboard.tsx";
 import FreelancerDashboard from "./pages/Freelancer/FreelancerDashboard.tsx";
 import FreelancerAccountSetup from "./pages/Freelancer/FreelancerAccountSetup.tsx";
 import ProtectedRoutes from "./components/General/ProtectedRoute.tsx";
-import LoginPage from "./pages/Shared/LoginPage.tsx";
+import LoginPage from "./pages/Shared/LoginForm.tsx"
 
 const router = createBrowserRouter([
   { path: "/", element: <App /> },

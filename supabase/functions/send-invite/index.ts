@@ -26,7 +26,6 @@ Deno.serve(async (req) => {
 
   try {
     const { freelancer_id, firstName, lastName, email } = await req.json()
-     console.log("freelancerId received:", freelancerId)
 
     const token = crypto.randomUUID()
 
