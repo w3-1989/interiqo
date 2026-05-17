@@ -14,12 +14,16 @@ import FreelancerDashboard from "./pages/Freelancer/FreelancerDashboard.tsx";
 import FreelancerAccountSetup from "./pages/Freelancer/FreelancerAccountSetup.tsx";
 import ProtectedRoutes from "./components/General/ProtectedRoute.tsx";
 import LoginPage from "./pages/Shared/LoginForm.tsx"
+import ForgotPassword from "./pages/Shared/ForgotPassword.tsx"
+import ResetPassword from "./pages/Shared/ResetPassword.tsx";
 
 const router = createBrowserRouter([
   { path: "/", element: <App /> },
   { path: "/client-account-setup", element: <ClientAccountSetup /> },
   { path: "/freelancer-account-setup", element: <FreelancerAccountSetup /> },
   { path: "/login", element: <LoginPage /> },
+  {path: "/forgotten-password", element:<ForgotPassword/>},
+  {path: "/reset-password", element: <ResetPassword/>},
   {
     path: "/discovery-chat",
     element: (
