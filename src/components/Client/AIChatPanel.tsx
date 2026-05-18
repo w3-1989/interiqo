@@ -1,35 +1,47 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import callDiscoveryChat from "../../lib/api/Client/callDiscoveryChat";
 import { supabase } from "../../lib/supabaseClient";
 import { useNavigate } from "react-router-dom";
 import { useUserData } from "../../hooks/useUserData";
 import DiamondLM from "../../assets/branding/Client/DiamondLM.svg?react";
 import DiamondDM from "../../assets/branding/Client/DiamondDM.svg?react";
-import { FileUp, ArrowUp } from "lucide-react";
+import {
+  FileUp,
+  ArrowUp,
+  FileCheckCorner,
+  X,
+  FileExclamationPoint,
+} from "lucide-react";
 import { ThemeContext } from "../../context/ThemeContext";
 import type { Messages } from "../../types/Messages";
+import type { FileUpload } from "../../types/FileUpload";
 
 type ChatInputBoxProps = {
   chat: Messages[];
   setChat: (value: Messages[]) => void;
   isStreaming: boolean;
   setIsStreaming: (value: boolean) => void;
-  displayedText: string,
-  setDisplayedText: React.Dispatch<React.SetStateAction<string>>,
-  textQueue: string,
-  setTextQueue: React.Dispatch<React.SetStateAction<string>>
+  displayedText: string;
+  setDisplayedText: React.Dispatch<React.SetStateAction<string>>;
+  textQueue: string;
+  setTextQueue: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export default function AIChatPanel(props: ChatInputBoxProps) {
-
   const [userInputValue, setUserInputValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [submitProject, setSubmitProject] = useState(true);
+  const [fileLoading, setFileLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [base64Files, setBase64Files] = useState<string[]>([]);
+  const [files, setFiles] = useState<FileUpload[]>([]);
   const { conversationId } = useUserData();
 
   const { isDarkMode } = useContext(ThemeContext);
 
   const navigate = useNavigate();
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (props.textQueue.length === 0) return;
@@ -53,7 +65,13 @@ export default function AIChatPanel(props: ChatInputBoxProps) {
     props.setChat(updatedMessage);
     setLoading(true);
     props.setIsStreaming(true);
-    const response = await callDiscoveryChat(updatedMessage);
+    const response = await callDiscoveryChat(
+      updatedMessage,
+      files,
+      base64Files,
+    );
+    setBase64Files([]);
+    setFiles([]);
     props.setTextQueue(response?.replace("SUBMIT_PROJECT", "").trim() ?? "");
     props.setChat([
       ...updatedMessage,
@@ -102,6 +120,60 @@ export default function AIChatPanel(props: ChatInputBoxProps) {
   function handleProjectSubmit() {
     return navigate("/confirm-project-report");
   }
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    if (errorMessage) {
+      timerRef.current = setTimeout(() => {
+        setErrorMessage("");
+      }, 5000);
+    }
+
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, [errorMessage]);
+
+  async function handleFileSubmit(e: React.ChangeEvent<HTMLInputElement>) {
+    const mimeTypes = [
+      "application/pdf",
+      "image/png",
+      "image/jpeg",
+      "text/plain",
+    ];
+
+    if (!e.target.files) return setErrorMessage("No files uploaded");
+    if (files.length >= 3) return setErrorMessage("File limit reached");
+    const file = e.target.files[0];
+
+    if (!mimeTypes.includes(file.type))
+      return setErrorMessage("File type not supported");
+    if (file.size > 20971520) return setErrorMessage("File size is too large");
+    setFileLoading(true);
+    const base64 = await fileTo64Base(file);
+    setFileLoading(false);
+    setFiles([...files, { filename: file.name, file_id: "" }]);
+    setBase64Files([...base64Files, base64]);
+  }
+
+  function fileTo64Base(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (reader.result) {
+          const base64 = (reader.result as string).split(",")[1];
+          resolve(base64);
+        }
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function removeFile(i: number) {
+    setFiles(files.filter((_, pos) => pos !== i));
+    setBase64Files(base64Files.filter((_, pos) => pos !== i));
+  }
 
   return (
     <>
@@ -117,6 +189,35 @@ export default function AIChatPanel(props: ChatInputBoxProps) {
           </div>
         )}
       </div>
+
+      <div className="flex w-[648px] text-[12px] flex-wrap gap-1">
+        <div
+          className={`flex flex-row min-h-11 items-center bg-[#B3261E]/10 p-3 gap-2 transition-opacity duration-300 ${errorMessage ? "opacity-100" : "opacity-0"} `}
+        >
+          <FileExclamationPoint color="#B3261E" className="w-4 h-4" />
+          <p className="text-black dark:text-white">{errorMessage}</p>
+        </div>
+        <div className="min-h-11"></div>
+        {files.map((file, i) => (
+          <div
+            key={i}
+            className="flex min-h-10 w-[212px] p-3 items-center justify-between bg-interiqo-purple-400"
+          >
+            <div className="flex flex-row items-center gap-2">
+              <FileCheckCorner color="white" className="w-4 h-4" />
+              <p className="text-white truncate max-w-[120px]">
+                {file.filename}
+              </p>
+            </div>
+            <X
+              color="white"
+              className="w-4 h-4 cursor-pointer"
+              onClick={() => removeFile(i)}
+            />
+          </div>
+        ))}
+      </div>
+
       <div className="shadow-[0_4px_120px_30px_rgba(88,5,255,0.1)] dark:shadow-[0_4px_120px_30px_rgba(88,5,255,0.2)] p-4 bg-white dark:bg-black w-[648px] min-h-[150px] flex flex-col justify-between gap-4">
         <textarea
           className="outline-none border-none resize-none bg-transparent dark:text-white"
@@ -138,14 +239,35 @@ export default function AIChatPanel(props: ChatInputBoxProps) {
           }}
         />
         <div className="flex flex-row justify-between">
+          <input
+            type="file"
+            ref={fileInputRef}
+            className="hidden"
+            onChange={(e) => {
+              if (!e.target.files) {
+                return;
+              } else {
+                handleFileSubmit(e);
+              }
+            }}
+          />
           <button
-            className=" z-2 flex items-center justify-center min-h-10 min-w-10 bg-white dark:bg-interiqo-black-400 border border-black/5 cursor-pointer"
-            onClick={() => handleResponseSubmit()}
+            disabled={files.length >= 3}
+            onClick={() => fileInputRef.current?.click()}
+            className={`z-2 flex items-center justify-center min-h-10 min-w-10 bg-white dark:bg-interiqo-black-400 border border-black/5 ${files.length >= 3 ? "" : "cursor-pointer"}`}
           >
-            <FileUp
-              color={isDarkMode ? "white" : "black"}
-              className="w-4 h-4"
-            />
+            {fileLoading ? (
+              <span className="flex gap-1">
+                <span className="dot-1 w-1 h-1 bg-black dark:bg-white rounded-full" />
+                <span className="dot-2 w-1 h-1 bg-black dark:bg-white rounded-full" />
+                <span className="dot-3 w-1 h-1 bg-black dark:bg-white rounded-full" />
+              </span>
+            ) : (
+              <FileUp
+                color={isDarkMode ? "white" : "black"}
+                className={`w-4 h-4 ${files.length >= 3 ? "opacity-10" : ""}`}
+              />
+            )}
           </button>
           {submitProject ? (
             <button

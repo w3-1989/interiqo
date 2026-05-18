@@ -15,9 +15,11 @@ export default function DiscoveryChat() {
   const [chat, setChat] = useState<Messages[]>([]);
   const [isStreaming, setIsStreaming] = useState(false);
   const [displayedText, setDisplayedText] = useState("");
+
   const [textQueue, setTextQueue] = useState("");
   const { isDarkMode } = useContext(ThemeContext);
   const { clientName } = useUserData();
+
 
   if (!clientName)
     return (
@@ -39,7 +41,7 @@ export default function DiscoveryChat() {
         disableToggle={!!(displayedText || isStreaming || textQueue)}
         />
         <section className="flex-1 flex flex-col justify-center items-center">
-          <div className="flex flex-col items-center gap-8 -mt-16">
+          <div className="flex flex-col items-center gap-2 -mt-16">
             <div
               className={`transition-opacity duration-700 ${clientName ? "opacity-100" : "opacity-0"} absolute top-1/2 left-1/2 -translate-x-1/2 top-[35%] flex flex-row items-center gap-6`}
             >

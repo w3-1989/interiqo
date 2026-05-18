@@ -1,22 +1,18 @@
-
-
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
+};
 
-console.log(`Function "browser-with-cors" up and running!`)
-const ANTHROPIC_SECRET_KEY = Deno.env.get('ANTHROPIC_SECRET_KEY');
-
+const ANTHROPIC_SECRET_KEY = Deno.env.get("ANTHROPIC_SECRET_KEY");
 
 Deno.serve(async (req) => {
-  if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders })
+  if (req.method === "OPTIONS") {
+    return new Response("ok", { headers: corsHeaders });
   }
 
-  try{
-    console.log(req)
-    const {messages} = await req.json()
+  try {
+    const { messages, files, base64Files } = await req.json();
 
     const system = `You are a specialist discovery consultant for clients who 
     have a desire but lack the knowledge to fully understand what needs to be 
@@ -33,54 +29,103 @@ Deno.serve(async (req) => {
     disagree, ask what needs changing and revise the summary before 
     asking for confirmation again. Only when the client confirms the 
     summary is correct should you end the conversation by telling 
-    them to click the Submit Project button. include the exact text 
+    them to click the Submit Project button. Include the exact text 
     SUBMIT_PROJECT at the very end of your message but do not display 
-    it or reference it in your response.Do not use dashes, em dashes, or 
-    any punctuation for lists or emphasis. Write in plain flowing sentences only.`
+    it or reference it in your response. Do not use dashes, em dashes, or 
+    any punctuation for lists or emphasis. Write in plain flowing sentences only.`;
 
+    const mimeTypes: Record<string, string> = {
+      pdf: "application/pdf",
+      png: "image/png",
+      jpg: "image/jpeg",
+      jpeg: "image/jpeg",
+      txt: "text/plain",
+    };
 
-//     `You are a discovery consultant uncovering exactly what a client needs to achieve their goal. Follow these rules strictly:
+    const fileIdArr: { id: string; mimeType: string }[] = [];
 
-// - Ask one question at a time. Keep every response to one plain paragraph.
-// - No markdown, bullet points, dashes, em dashes, or formatting of any kind. Plain sentences only.
-// - Begin immediately with a question. Never open with thanks or pleasantries.
-// - Never suggest new features or expand scope. Gently redirect if the client does.
+    if (base64Files && base64Files.length > 0) {
+      for (let i = 0; i < base64Files.length; i++) {
+        const extension = files[i].filename.split(".").pop().toLowerCase();
+        const mimeType = mimeTypes[extension] ?? "application/octet-stream";
 
-// When you have a clear picture, present a summary in this exact structure:
-// Main Goal: [one sentence]
-// What needs to be accomplished: [one sentence]
-// Desired end result: [one sentence]
+        // Efficient base64 to Uint8Array conversion — avoids CPU-heavy loop
+        const bytes = Uint8Array.from(atob(base64Files[i]), (c) =>
+          c.charCodeAt(0)
+        );
 
-// Then ask the client to confirm the summary is correct. If they disagree, ask what to change, revise, and ask again. Repeat until confirmed.
+        const blob = new Blob([bytes], { type: mimeType });
+        const formData = new FormData();
+        formData.append("file", blob, files[i].filename);
 
-// Once confirmed, tell them to click the Submit Project button. Append SUBMIT_PROJECT at the very end of the message with no surrounding text or reference to it.`
+        const uploadRes = await fetch("https://api.anthropic.com/v1/files", {
+          method: "POST",
+          headers: {
+            "anthropic-version": "2023-06-01",
+            "anthropic-beta": "files-api-2025-04-14",
+            "X-Api-Key": `${ANTHROPIC_SECRET_KEY}`,
+          },
+          body: formData,
+        });
 
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'anthropic-version': '2023-06-01',
-      "X-Api-Key": `${ANTHROPIC_SECRET_KEY}`,
-    },
-    body: JSON.stringify({
-      model: 'claude-opus-4-6',
-      max_tokens: 1024,
-      system: system,
-      messages: messages,
-    }),
-  });
+        const uploadData = await uploadRes.json();
+        fileIdArr.push({ id: uploadData.id, mimeType });
+      }
+    }
 
- const data = await res.json();
-return new Response(JSON.stringify(data), {
-  status: 200,
-  headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-});
+    const updatedMessages =
+      fileIdArr.length > 0
+        ? [
+            ...messages.slice(0, -1),
+            {
+              role: "user",
+              content: [
+                {
+                  type: "text",
+                  text: messages[messages.length - 1].content,
+                },
+                ...fileIdArr.map((item) =>
+                  item.mimeType.includes("image")
+                    ? {
+                        type: "image",
+                        source: { type: "file", file_id: item.id },
+                      }
+                    : {
+                        type: "document",
+                        source: { type: "file", file_id: item.id },
+                      }
+                ),
+              ],
+            },
+          ]
+        : messages;
 
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "anthropic-beta": "files-api-2025-04-14",
+        "Content-Type": "application/json",
+        "anthropic-version": "2023-06-01",
+        "X-Api-Key": `${ANTHROPIC_SECRET_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "claude-opus-4-6",
+        max_tokens: 1024,
+        system: system,
+        messages: updatedMessages,
+      }),
+    });
+
+    const data = await res.json();
+    return new Response(JSON.stringify(data), {
+      status: 200,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
   } catch (error: unknown) {
-     const message = error instanceof Error ? error.message : 'Unknown error'
+    const message = error instanceof Error ? error.message : "Unknown error";
     return new Response(JSON.stringify({ error: message }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 400,
-    })
+    });
   }
-})
+});
