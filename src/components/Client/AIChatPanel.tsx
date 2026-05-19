@@ -49,7 +49,7 @@ export default function AIChatPanel(props: ChatInputBoxProps) {
     const interval = setInterval(() => {
       props.setDisplayedText((prev) => prev + props.textQueue[0]);
       props.setTextQueue((prev) => prev.slice(1));
-    }, 5);
+    }, 15);
     return () => clearInterval(interval);
   }, [props.textQueue]);
 
