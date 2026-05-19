@@ -37,6 +37,7 @@ Deno.serve(async (req) => {
     const mimeTypes: Record<string, string> = {
       pdf: "application/pdf",
       png: "image/png",
+      webp: "image/webp",
       jpg: "image/jpeg",
       jpeg: "image/jpeg",
       txt: "text/plain",

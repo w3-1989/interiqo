@@ -35,6 +35,7 @@ export default function AIChatPanel(props: ChatInputBoxProps) {
   const [errorMessage, setErrorMessage] = useState("");
   const [base64Files, setBase64Files] = useState<string[]>([]);
   const [files, setFiles] = useState<FileUpload[]>([]);
+  const [displayedError, setDisplayedError] = useState("");
   const { conversationId } = useUserData();
 
   const { isDarkMode } = useContext(ThemeContext);
@@ -134,21 +135,35 @@ export default function AIChatPanel(props: ChatInputBoxProps) {
     };
   }, [errorMessage]);
 
+  function setError(msg: string) {
+  setErrorMessage(msg)
+  setDisplayedError(msg)
+}
+
   async function handleFileSubmit(e: React.ChangeEvent<HTMLInputElement>) {
     const mimeTypes = [
       "application/pdf",
       "image/png",
+      "image/webp",
       "image/jpeg",
       "text/plain",
     ];
 
-    if (!e.target.files) return setErrorMessage("No files uploaded");
-    if (files.length >= 3) return setErrorMessage("File limit reached");
+    if (!e.target.files) {
+      return setError("No files uploaded");
+    }
+    if (files.length >= 3) {
+      return setError("File limit reached");
+    }
     const file = e.target.files[0];
 
-    if (!mimeTypes.includes(file.type))
-      return setErrorMessage("File type not supported");
-    if (file.size > 20971520) return setErrorMessage("File size is too large");
+    if (!mimeTypes.includes(file.type)) {
+      return setError("File type not supported");
+    }
+    if (file.size > 20971520) {
+      return setError("File size is too large");
+     
+    }
     setFileLoading(true);
     const base64 = await fileTo64Base(file);
     setFileLoading(false);
@@ -190,32 +205,23 @@ export default function AIChatPanel(props: ChatInputBoxProps) {
         )}
       </div>
 
-      <div className="flex w-[648px] text-[12px] flex-wrap gap-1">
-        <div
-          className={`flex flex-row min-h-11 items-center bg-[#B3261E]/10 p-3 gap-2 transition-opacity duration-300 ${errorMessage ? "opacity-100" : "opacity-0"} `}
-        >
+      <div className="flex flex-col w-[648px] min-h-11 text-[12px] gap-1">
+        <div className={`flex w-fit flex-row items-center bg-[#B3261E]/10 p-3 gap-2 transition-opacity duration-300 ${errorMessage ? "opacity-100" : "opacity-0"}`}>
           <FileExclamationPoint color="#B3261E" className="w-4 h-4" />
-          <p className="text-black dark:text-white">{errorMessage}</p>
+          <p className="text-black dark:text-white">{displayedError}</p>
         </div>
-        <div className="min-h-11"></div>
-        {files.map((file, i) => (
-          <div
-            key={i}
-            className="flex min-h-10 w-[212px] p-3 items-center justify-between bg-interiqo-purple-400"
-          >
-            <div className="flex flex-row items-center gap-2">
-              <FileCheckCorner color="white" className="w-4 h-4" />
-              <p className="text-white truncate max-w-[120px]">
-                {file.filename}
-              </p>
+        <div className="flex flex-wrap gap-1">
+        <div className="flex flex-wrap gap-1 min-h-11"></div>
+          {files.map((file, i) => (
+            <div key={i} className="flex min-h-10 w-[212px] p-3 items-center justify-between bg-interiqo-purple-400">
+              <div className="flex flex-row items-center gap-2">
+                <FileCheckCorner color="white" className="w-4 h-4" />
+                <p className="text-white truncate max-w-[120px]">{file.filename}</p>
+              </div>
+              <X color="white" className="w-4 h-4 cursor-pointer" onClick={() => removeFile(i)} />
             </div>
-            <X
-              color="white"
-              className="w-4 h-4 cursor-pointer"
-              onClick={() => removeFile(i)}
-            />
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       <div className="shadow-[0_4px_120px_30px_rgba(88,5,255,0.1)] dark:shadow-[0_4px_120px_30px_rgba(88,5,255,0.2)] p-4 bg-white dark:bg-black w-[648px] min-h-[150px] flex flex-col justify-between gap-4">

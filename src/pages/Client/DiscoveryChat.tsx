@@ -1,6 +1,6 @@
 
 
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import TopBarSimple from "../../components/General/TopBarSimple";
 import Background from "../../assets/backgrounds/GeometricBG.svg?react";
 import DiamondLM from "../../assets/branding/Client/DiamondLM.svg?react";
@@ -10,6 +10,7 @@ import { useUserData } from "../../hooks/useUserData";
 import TimeOfDayGreeting from "../../helpers/TimeOfDayGreeting";
 import AIChatPanel from "../../components/Client/AIChatPanel";
 import type { Messages } from "../../types/Messages";
+import { supabase } from "../../lib/supabaseClient";
 
 export default function DiscoveryChat() {
   const [chat, setChat] = useState<Messages[]>([]);
@@ -18,7 +19,35 @@ export default function DiscoveryChat() {
 
   const [textQueue, setTextQueue] = useState("");
   const { isDarkMode } = useContext(ThemeContext);
-  const { clientName } = useUserData();
+  const { clientName, conversationId } = useUserData();
+  
+
+  useEffect(() => {
+    async function getUserConvo() {
+
+      if(!conversationId){
+        return console.log("DiscoveryChat - No conversation Id found")
+      }
+        const {data, error} = await supabase
+        .from("messages")
+        .select()
+        .eq("conversation_id", conversationId)
+
+        if(!data){
+          return console.log("DiscoveryChat - no data found", error)
+        }
+
+        const chat = data.map((e) => ({
+          role: e.role,
+          content: e.content 
+        }))
+
+      setChat(chat)
+      setDisplayedText(chat[chat.length - 1].content)
+   }
+    getUserConvo()
+
+  }, [conversationId])
 
 
   if (!clientName)
