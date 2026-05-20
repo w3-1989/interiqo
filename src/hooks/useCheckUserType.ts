@@ -11,9 +11,11 @@ export default function useCheckUserType() {
       if (!session) {
         setUserType("");
         setLoading(false);
+        return
       }
 
       async function getUserType() {
+         setLoading(true)
         const { data:freelancerData, error } = await supabase
           .from("freelancers")
           .select()

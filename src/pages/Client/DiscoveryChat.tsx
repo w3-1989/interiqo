@@ -43,7 +43,9 @@ export default function DiscoveryChat() {
         }))
 
       setChat(chat)
-      setDisplayedText(chat[chat.length - 1].content)
+      if (chat.length > 0) {
+        setDisplayedText(chat[chat.length - 1].content as string)
+      }
    }
     getUserConvo()
 

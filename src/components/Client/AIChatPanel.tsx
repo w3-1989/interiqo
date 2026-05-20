@@ -191,130 +191,105 @@ export default function AIChatPanel(props: ChatInputBoxProps) {
     setBase64Files(base64Files.filter((_, pos) => pos !== i));
   }
 
+  const chatEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [props.displayedText]);
+
   return (
-    <>
-      <div className="max-w-[648px] w-[648px] h-[364px] overflow-y-auto dark:text-white flex flex-col snap-y gap-3">
-        {(props.displayedText || props.isStreaming) && (
-          <div className="flex flex-row items-start gap-4">
-            {isDarkMode ? (
-              <DiamondDM className="min-h-[40px] min-w-[40px] h-10 w-auto drop-shadow-lg animate-float" />
-            ) : (
-              <DiamondLM className="min-h-[40px] min-w-[40px] h-10 w-auto drop-shadow-lg animate-float" />
-            )}
-            <p>{props.displayedText}</p>
-          </div>
-        )}
-      </div>
-
-      <div className="flex flex-col w-[648px] min-h-11 text-[12px] gap-1">
-        <div
-          className={`flex w-fit flex-row items-center bg-[#B3261E]/10 p-3 gap-2 transition-opacity duration-300 ${errorMessage ? "opacity-100" : "opacity-0"}`}
-        >
-          <FileExclamationPoint color="#B3261E" className="w-4 h-4" />
-          <p className="text-black dark:text-white">{displayedError}</p>
-        </div>
-        <div className="flex flex-wrap gap-1">
-          <div className="flex flex-wrap gap-1 min-h-11"></div>
-          {files.map((file, i) => (
-            <div
-              key={i}
-              className="flex min-h-10 w-[212px] p-3 items-center justify-between bg-interiqo-purple-400"
-            >
-              <div className="flex flex-row items-center gap-2">
-                <FileCheckCorner color="white" className="w-4 h-4" />
-                <p className="text-white truncate max-w-[120px]">
-                  {file.filename}
-                </p>
-              </div>
-              <X
-                color="white"
-                className="w-4 h-4 cursor-pointer"
-                onClick={() => removeFile(i)}
-              />
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="shadow-[0_4px_120px_30px_rgba(88,5,255,0.1)] dark:shadow-[0_4px_120px_30px_rgba(88,5,255,0.2)] p-4 bg-white dark:bg-black w-[648px] min-h-[150px] flex flex-col justify-between gap-4">
-        <textarea
-          className="outline-none border-none resize-none bg-transparent dark:text-white"
-          value={userInputValue}
-          placeholder={
-            props.chat.length > 0
-              ? "Write a response..."
-              : "Describe your project..."
-          }
-          onChange={(e) => {
-            setUserInputValue(e.target.value);
-            setSubmitProject(true);
-          }}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              e.preventDefault();
-              handleResponseSubmit();
-            }
-          }}
-        />
-        <div className="flex flex-row justify-between">
-          <input
-            type="file"
-            ref={fileInputRef}
-            accept={ALLOWED_MIME_TYPES.join(",")}
-            className="hidden"
-            onChange={(e) => {
-              if (!e.target.files) {
-                return;
-              } else {
-                handleFileSubmit(e);
-              }
-            }}
-          />
-          <button
-            disabled={files.length >= 3}
-            onClick={() => fileInputRef.current?.click()}
-            className={`z-2 flex items-center justify-center min-h-10 min-w-10 bg-white dark:bg-interiqo-black-400 border border-black/5 ${files.length >= 3 ? "" : "cursor-pointer"}`}
-          >
-            {fileLoading ? (
-              <span className="flex gap-1">
-                <span className="dot-1 w-1 h-1 bg-black dark:bg-white rounded-full" />
-                <span className="dot-2 w-1 h-1 bg-black dark:bg-white rounded-full" />
-                <span className="dot-3 w-1 h-1 bg-black dark:bg-white rounded-full" />
-              </span>
-            ) : (
-              <FileUp
-                color={isDarkMode ? "white" : "black"}
-                className={`w-4 h-4 ${files.length >= 3 ? "opacity-10" : ""}`}
-              />
-            )}
-          </button>
-          {submitProject ? (
-            <button
-              className="flex items-center justify-center min-h-10 min-w-10 bg-interiqo-purple-400 cursor-pointer"
-              disabled={loading}
-              onClick={() => handleResponseSubmit()}
-            >
-              {loading ? (
-                <span className="flex gap-1">
-                  <span className="dot-1 w-1 h-1 bg-white rounded-full" />
-                  <span className="dot-2 w-1 h-1 bg-white rounded-full" />
-                  <span className="dot-3 w-1 h-1 bg-white rounded-full" />
-                </span>
-              ) : (
-                <ArrowUp color="white" className="w-4 h-4" />
-              )}
-            </button>
+  <>
+    <div className="flex flex-row items-start gap-6 w-[780px]">
+      
+      {(props.displayedText || props.isStreaming) && (
+        <div className="pt-2">
+          {isDarkMode ? (
+            <DiamondDM className="min-h-[44px] min-w-[44px] h-11 w-auto drop-shadow-lg animate-float" />
           ) : (
-            <button
-              className="flex items-center justify-center min-w-[170px] min-h-[38px] bg-interiqo-purple-400 text-xs text-white cursor-pointer"
-              disabled={submitProject}
-              onClick={() => handleProjectSubmit()}
-            >
-              Generate Project Brief
-            </button>
+            <DiamondLM className="min-h-[44px] min-w-[44px] h-11 w-auto drop-shadow-lg animate-float" />
           )}
         </div>
+      )}
+
+      <div className="flex flex-col flex-1 gap-1">
+        
+        <div
+          style={{ maskImage: "linear-gradient(to bottom, black 85%, transparent 100%)" }}
+          className="h-[380px] scrollbar-hide pb-8 overflow-y-auto dark:text-white flex flex-col"
+        >
+          {(props.displayedText || props.isStreaming) && (
+            <p className="text-[16px] leading-8">{props.displayedText}</p>
+          )}
+          <div ref={chatEndRef} />
+        </div>
+
+        <div className="flex flex-col text-[12px] gap-1">
+          <div className={`flex w-fit flex-row items-center bg-[#B3261E]/10 p-3 gap-2 transition-opacity duration-300 ${errorMessage ? "opacity-100" : "opacity-0"}`}>
+            <FileExclamationPoint color="#B3261E" className="w-4 h-4" />
+            <p className="text-black dark:text-white">{displayedError}</p>
+          </div>
+          <div className="flex flex-wrap gap-1">
+            <div className="flex flex-wrap gap-1 min-h-11"></div>
+            {files.map((file, i) => (
+              <div key={i} className="flex min-h-10 w-[212px] p-3 items-center justify-between bg-interiqo-purple-400">
+                <div className="flex flex-row items-center gap-2">
+                  <FileCheckCorner color="white" className="w-4 h-4" />
+                  <p className="text-white truncate max-w-[120px]">{file.filename}</p>
+                </div>
+                <X color="white" className="w-4 h-4 cursor-pointer" onClick={() => removeFile(i)} />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="shadow-[0_4px_120px_30px_rgba(88,5,255,0.1)] dark:shadow-[0_4px_120px_30px_rgba(88,5,255,0.2)] p-6 bg-white dark:bg-black min-h-[160px] flex flex-col justify-between gap-4">
+          <textarea
+            className="outline-none border-none resize-none bg-transparent dark:text-white text-[14px] leading-7"
+            value={userInputValue}
+            placeholder={props.chat.length > 0 ? "Write a response..." : "Describe your project..."}
+            onChange={(e) => { setUserInputValue(e.target.value); setSubmitProject(true); }}
+            onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); handleResponseSubmit(); } }}
+          />
+          <div className="flex flex-row justify-between">
+            <input type="file" ref={fileInputRef} accept={ALLOWED_MIME_TYPES.join(",")} className="hidden"
+              onChange={(e) => { if (!e.target.files) { return; } else { handleFileSubmit(e); } }}
+            />
+            <button disabled={files.length >= 3} onClick={() => fileInputRef.current?.click()}
+              className={`z-2 flex items-center justify-center min-h-10 min-w-10 bg-white dark:bg-interiqo-black-400 border border-black/5 ${files.length >= 3 ? "" : "cursor-pointer"}`}>
+              {fileLoading ? (
+                <span className="flex gap-1">
+                  <span className="dot-1 w-1 h-1 bg-black dark:bg-white rounded-full" />
+                  <span className="dot-2 w-1 h-1 bg-black dark:bg-white rounded-full" />
+                  <span className="dot-3 w-1 h-1 bg-black dark:bg-white rounded-full" />
+                </span>
+              ) : (
+                <FileUp color={isDarkMode ? "white" : "black"} className={`w-4 h-4 ${files.length >= 3 ? "opacity-10" : ""}`} />
+              )}
+            </button>
+            {submitProject ? (
+              <button className="flex items-center justify-center min-h-10 min-w-10 bg-interiqo-purple-400 cursor-pointer"
+                disabled={loading} onClick={() => handleResponseSubmit()}>
+                {loading ? (
+                  <span className="flex gap-1">
+                    <span className="dot-1 w-1 h-1 bg-white rounded-full" />
+                    <span className="dot-2 w-1 h-1 bg-white rounded-full" />
+                    <span className="dot-3 w-1 h-1 bg-white rounded-full" />
+                  </span>
+                ) : (
+                  <ArrowUp color="white" className="w-4 h-4" />
+                )}
+              </button>
+            ) : (
+              <button className="flex items-center justify-center min-w-[170px] min-h-[38px] bg-interiqo-purple-400 text-xs text-white cursor-pointer"
+                disabled={submitProject} onClick={() => handleProjectSubmit()}>
+                Generate Project Brief
+              </button>
+            )}
+          </div>
+        </div>
+
       </div>
-    </>
-  );
+    </div>
+  </>
+);
 }

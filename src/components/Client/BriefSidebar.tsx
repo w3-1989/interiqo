@@ -2,7 +2,6 @@ import { useUserData } from "../../hooks/useUserData";
 import { Square } from "lucide-react";
 import { supabase } from "../../lib/supabaseClient";
 import { useNavigate } from "react-router-dom";
-import { Clock, BadgePoundSterling } from "lucide-react";
 
 const projectMap = [
   { heading: "Discovery ", status: "completed" },
@@ -80,32 +79,16 @@ export default function BriefSideBar() {
           <div className=" flex flex-col text-[31px] font-avant text-black dark:text-white justify-start">
             {clientName} {clientLastName}
           </div>
-          <div className=" flex flex-col text-[12px] font-DMSans text-black dark:text-white justify-start mb-20 ">
+          <div className=" flex flex-col text-[12px] font-DMSans text-black dark:text-white justify-start mb-4 ">
             {date}
           </div>
           {companyName && clientName ? renderRoadMap() : null}
         </div>
 
-
-
-        <div className="flex flew-row justify-between">
-          <div className="flex flex-col gap-2">
-            <div className="flex flex-row items-center gap-3">
-              <Clock className="w-4 h-4 text-interiqo-purple-400" />
-              <span className="text-[12px] text-black dark:text-white">
-                6 months
-              </span>
-            </div>
-            <div className="flex flex-row items-center gap-3">
-              <BadgePoundSterling className="w-4 h-4 text-interiqo-purple-400" />
-              <span className="text-[12px] text-black dark:text-white">
-                £25,000 - £35,000
-              </span>
-            </div>
-          </div>
+        <div className="w-full">
           <button
             onClick={() => handleBriefSubmit()}
-            className="flex items-center justify-center p-3 w-fit min-h-[38px] bg-interiqo-purple-400 text-[12px] text-white  cursor-pointer border border-black/10 "
+            className="flex items-center justify-center w-full p-3 min-h-[44px] bg-interiqo-purple-400 text-[12px] text-white cursor-pointer"
           >
             Submit brief
           </button>

@@ -6,20 +6,44 @@ is generated and stored.
 */
 
 import ReactMarkdown from "react-markdown";
-import { useRef } from "react";
+import { useRef, useState, useContext } from "react";
 import { FileDown } from "lucide-react";
+import BriefAIEditChat from "../../components/Client/BriefAIEditChat";
+import DiamondLM from "../../assets/branding/Client/DiamondLM.svg?react";
+import DiamondDM from "../../assets/branding/Client/DiamondDM.svg?react";
+import { ThemeContext } from "../../context/ThemeContext";
 
 type BriefContentProps = {
   brief: string;
   setBrief: React.Dispatch<React.SetStateAction<string>>;
+  title: string;
 };
 
 export default function BriefContent(props: BriefContentProps) {
+
+  const { isDarkMode } = useContext(ThemeContext);
+
   const briefRef = useRef<HTMLDivElement>(null);
+
+  const [aiChatToggle,setAiChatToggle] = useState(false)
+
+  function toggleAiEditMode(){
+    setAiChatToggle(true)
+  }
 
   function handleFileDownload() {
     window.print();
   }
+
+  if (!props.brief) return (
+  <div className="w-[611px] h-full flex items-center justify-center">
+    {isDarkMode ? (
+      <DiamondDM className="h-20 w-auto drop-shadow-lg animate-float" />
+    ) : (
+      <DiamondLM className="h-20 w-auto drop-shadow-lg animate-float" />
+    )}
+  </div>
+);
 
   return (
     <>
@@ -34,7 +58,7 @@ export default function BriefContent(props: BriefContentProps) {
           className="flex dark:text-white flex-col max-w-[611px] h-full overflow-y-auto scrollbar-hide pt-7 pb-8 "
         >
           <h1 className="font-avant text-[31px] dark:text-white">
-            Project Heading will go here
+            {props.title}
           </h1>
           <ReactMarkdown
             components={{
@@ -55,15 +79,15 @@ export default function BriefContent(props: BriefContentProps) {
             {props.brief}
           </ReactMarkdown>
         </div>
-        <div className="flex flex-row justify-between">
-          <button className="flex items-center justify-center p-3 w-fit min-h-[38px] bg-white dark:bg-interiqo-black-400 text-[12px] text-black dark:text-white cursor-pointer border border-black/10 ">
+        <div className={aiChatToggle ? "block" : "hidden"}>
+          <BriefAIEditChat brief={props.brief} setBrief={props.setBrief} setAiChatToggle={setAiChatToggle}/>
+        </div>
+        <div className={aiChatToggle ? "hidden" : "flex flex-row justify-between"}>
+          <button onClick={() => toggleAiEditMode()} className="flex items-center justify-center p-3 w-fit min-h-[38px] bg-white dark:bg-interiqo-black-400 text-[12px] text-black dark:text-white cursor-pointer border border-black/10">
             Edit Brief
           </button>
-          <button
-            onClick={() => handleFileDownload()}
-            className="flex items-center justify-center p-3 w-fit min-h-[38px] bg-white dark:bg-interiqo-black-400 text-[12px] text-black dark:text-white cursor-pointer border border-black/10 "
-          >
-            <FileDown className=" w-[14px] h-[14px]" />
+          <button onClick={() => handleFileDownload()} className="flex items-center justify-center p-3 w-fit min-h-[38px] bg-white dark:bg-interiqo-black-400 text-[12px] text-black dark:text-white cursor-pointer border border-black/10">
+            <FileDown className="w-[14px] h-[14px]" />
           </button>
         </div>
       </section>
