@@ -1,7 +1,22 @@
 @import "tailwindcss";
 @source inline("bg-interiqoPurpleShade scale-110");
 @variant dark (&:where(.dark, .dark *));
+@plugin "tailwind-scrollbar-hide";
 
+
+@media print {
+  body * { visibility: hidden; }
+  #brief-content, #brief-content * { visibility: visible; }
+  #brief-content { 
+    position: absolute; 
+    left: 0; 
+    top: 0;
+    height: auto !important;
+    overflow: visible !important;
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
+  }
+}
 
 @font-face {
     font-family: Avant;
@@ -15,6 +30,21 @@
 @font-face {
     font-family: DMSans;
     src: url("src/assets/fonts/DMSans-VariableFont_opsz,wght.ttf") format("truetype");
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes growDown {
+  from { height: 0; }
+  to { height: 1rem; }
+}
+
+.animate-growDown {
+  animation: growDown 0.3s ease forwards;
+  height: 0;
 }
 
 @keyframes draw {

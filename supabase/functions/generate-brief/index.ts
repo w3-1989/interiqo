@@ -30,12 +30,12 @@ Deno.serve(async (req) => {
     Target Audience — who it's for
     Deliverables — what gets handed over
 
-    Format your response in section, with simple headings and the text should be plain text no jargon 
-    Do not use markdown, bullet points, dashes or any formatting, the tone should be professional and 
-    easy for both client and freelancer to understand so both parties have what exactly what they need 
-    the client has clarity, confidence and understanding and the freelancer has clear deliverables, clarity
-    and direction knowing exactly what the client needsDo not include any preamble, introductory phrases or
-    thank you messages — go straight into the brief sections.
+    Format your response using ## for each section heading and plain paragraphs for the body text.
+    Do not use bullet points, dashes, bold, italic, or any other markdown formatting — headings only.
+    The tone should be professional and easy for both client and freelancer to understand so both 
+    parties have exactly what they need — the client has clarity, confidence and understanding and 
+    the freelancer has clear deliverables, clarity and direction knowing exactly what the client needs.
+    Do not include any preamble, introductory phrases or thank you messages — go straight into the brief sections.
     `
 
     const res = await fetch('https://api.anthropic.com/v1/messages', {

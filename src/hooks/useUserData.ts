@@ -5,6 +5,9 @@ import { supabase } from "../lib/supabaseClient";
 export const useUserData = () => {
   const [conversationId, setConversationId] = useState(null);
   const [clientName, setClientName] = useState("");
+  const [clientLastName, setClientLastName] = useState("")
+  const [companyName, setCompanyName] = useState("")
+  const [createdDate, setCreatedDate] = useState("")
   const [error, setError] = useState<AuthError | PostgrestError>();
   useEffect(() => {
     async function fetchConvoId() {
@@ -23,6 +26,10 @@ export const useUserData = () => {
 
       if (clientData) {
         setClientName(clientData[0].first_name);
+        setClientLastName(clientData[0].last_name)
+        setCompanyName(clientData[0].organisation)
+        setCreatedDate(clientData[0].created_at)
+        
 
         const { data: conversationData, error: errorSelectingConversationId } =
           await supabase
@@ -48,5 +55,5 @@ export const useUserData = () => {
     fetchConvoId();
   }, []);
 
-  return { clientName, conversationId, error };
+  return { clientName, clientLastName, createdDate, companyName, conversationId, error };
 };
