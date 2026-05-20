@@ -39,7 +39,7 @@
 
 @keyframes growDown {
   from { height: 0; }
-  to { height: 1rem; }
+  to { height: 60px; }
 }
 
 .animate-growDown {

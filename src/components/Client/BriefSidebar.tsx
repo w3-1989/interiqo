@@ -62,7 +62,7 @@ export default function BriefSideBar() {
           {index !== projectMap.length - 1 ? (
             <div
               style={{ animationDelay: `${1 + index * 0.6}s` }}
-              className={`min-h-[60px] border-l-2 ${i.status === "completed" || i.status === "inProgress" ? "border-solid" : "border-dashed"} border-interiqo-purple-400 ml-[11px] animate-growDown`}
+              className={`h-[60px] origin-top border-l-2 ${i.status === "completed" || i.status === "inProgress" ? "border-solid" : "border-dashed"} border-interiqo-purple-400 ml-[11px] animate-growDown`}
             />
           ) : null}
         </div>
@@ -80,14 +80,13 @@ export default function BriefSideBar() {
           <div className=" flex flex-col text-[31px] font-avant text-black dark:text-white justify-start">
             {clientName} {clientLastName}
           </div>
-          <div className=" flex flex-col text-[12px] font-DMSans text-black dark:text-white justify-start ">
+          <div className=" flex flex-col text-[12px] font-DMSans text-black dark:text-white justify-start mb-20 ">
             {date}
           </div>
-        </div>
-
-        <div className=" flex flex-col  justify-center mb-14 ">
           {companyName && clientName ? renderRoadMap() : null}
         </div>
+
+
 
         <div className="flex flew-row justify-between">
           <div className="flex flex-col gap-2">
