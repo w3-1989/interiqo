@@ -9,7 +9,6 @@ import ReactMarkdown from "react-markdown";
 import { useRef } from "react";
 import { FileDown } from "lucide-react";
 
-
 type BriefContentProps = {
   brief: string;
   setBrief: React.Dispatch<React.SetStateAction<string>>;
@@ -18,9 +17,9 @@ type BriefContentProps = {
 export default function BriefContent(props: BriefContentProps) {
   const briefRef = useRef<HTMLDivElement>(null);
 
-function handleFileDownload() {
-  window.print()
-}
+  function handleFileDownload() {
+    window.print();
+  }
 
   return (
     <>

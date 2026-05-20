@@ -2,9 +2,7 @@ import { useUserData } from "../../hooks/useUserData";
 import { Square } from "lucide-react";
 import { supabase } from "../../lib/supabaseClient";
 import { useNavigate } from "react-router-dom";
-
-
-
+import { Clock, BadgePoundSterling } from "lucide-react";
 
 const projectMap = [
   { heading: "Discovery ", status: "completed" },
@@ -24,7 +22,6 @@ export default function BriefSideBar() {
     month: "long",
     year: "numeric",
   });
-
 
   async function handleBriefSubmit() {
     if (!conversationId) {
@@ -46,8 +43,8 @@ export default function BriefSideBar() {
   function renderRoadMap() {
     return projectMap.map((i, index) => {
       return (
-        <div key={index} className="flex flex-col">
-          <div className="flex flex-row gap-4 items-center">
+        <div key={index} className="flex flex-col ">
+          <div className="flex flex-row gap-6 items-center">
             <Square
               style={{ animationDelay: `${1 + index * 0.6}s` }}
               color="#5805FF"
@@ -56,18 +53,16 @@ export default function BriefSideBar() {
                   ? "#5805FF"
                   : "transparent"
               }
-              className={`w-[14px] h-[14px] animate-fadeIn ${i.status === "inProgress" ? "animate-pulse" : ""}`}
+              className={`w-[24px] h-[24px] animate-fadeIn ${i.status === "inProgress" ? "animate-pulse" : ""}`}
             />
-            <span className="text-[12px] text-black dark:text-white">
+            <span className="text-[16px] text-black dark:text-white">
               {i.heading}
             </span>
           </div>
           {index !== projectMap.length - 1 ? (
             <div
               style={{ animationDelay: `${1 + index * 0.6}s` }}
-              className={`w-0 h-4 border-l-2 
-                ${i.status === "completed" || i.status === "inProgress" ? "border-solid" : "border-dashed"}
-                 border-interiqo-purple-400 ml-[6px] animate-growDown`}
+              className={`min-h-[60px] border-l-2 ${i.status === "completed" || i.status === "inProgress" ? "border-solid" : "border-dashed"} border-interiqo-purple-400 ml-[11px] animate-growDown`}
             />
           ) : null}
         </div>
@@ -85,14 +80,30 @@ export default function BriefSideBar() {
           <div className=" flex flex-col text-[31px] font-avant text-black dark:text-white justify-start">
             {clientName} {clientLastName}
           </div>
-          <div className=" flex flex-col text-[12px] font-DMSans text-black dark:text-white justify-start">
+          <div className=" flex flex-col text-[12px] font-DMSans text-black dark:text-white justify-start ">
             {date}
           </div>
-          <div className=" flex flex-col  justify-start mt-4 ">
-            {companyName && clientName ? renderRoadMap() : null}
-          </div>
         </div>
+
+        <div className=" flex flex-col  justify-center mb-14 ">
+          {companyName && clientName ? renderRoadMap() : null}
+        </div>
+
         <div className="flex flew-row justify-between">
+          <div className="flex flex-col gap-2">
+            <div className="flex flex-row items-center gap-3">
+              <Clock className="w-4 h-4 text-interiqo-purple-400" />
+              <span className="text-[12px] text-black dark:text-white">
+                6 months
+              </span>
+            </div>
+            <div className="flex flex-row items-center gap-3">
+              <BadgePoundSterling className="w-4 h-4 text-interiqo-purple-400" />
+              <span className="text-[12px] text-black dark:text-white">
+                £25,000 - £35,000
+              </span>
+            </div>
+          </div>
           <button
             onClick={() => handleBriefSubmit()}
             className="flex items-center justify-center p-3 w-fit min-h-[38px] bg-interiqo-purple-400 text-[12px] text-white  cursor-pointer border border-black/10 "
