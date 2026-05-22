@@ -20,16 +20,15 @@
 
 @font-face {
     font-family: Avant;
-    src: url("./src/assets/fonts/itc-avant-garde-std-md.ttf") format("truetype");
+    src: url("/fonts/itc-avant-garde-std-md.ttf") format("truetype");
 }
 @font-face {
     font-family: Tiro;
-    src: url("./src/assets/fonts/TiroBangla-Italic.ttf") format("truetype");
+    src: url("/fonts/TiroBangla-Italic.ttf") format("truetype");
 }
-
 @font-face {
     font-family: DMSans;
-    src: url("./src/assets/fonts/DMSans-VariableFont_opsz,wght.ttf") format("truetype");
+    src: url("/fonts/DMSans-VariableFont_opsz,wght.ttf") format("truetype");
 }
 
 @keyframes fadeIn {
