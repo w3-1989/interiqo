@@ -6,12 +6,12 @@ is generated and stored.
 */
 
 import ReactMarkdown from "react-markdown";
-import { useRef, useState, useContext } from "react";
+import { useRef, useState } from "react";
 import { FileDown } from "lucide-react";
 import BriefAIEditChat from "../../components/Client/BriefAIEditChat";
 import DiamondLM from "../../assets/branding/Client/DiamondLM.svg?react";
 import DiamondDM from "../../assets/branding/Client/DiamondDM.svg?react";
-import { ThemeContext } from "../../context/ThemeContext";
+import useTheme from "../../hooks/useTheme";
 
 type BriefContentProps = {
   brief: string;
@@ -21,7 +21,7 @@ type BriefContentProps = {
 
 export default function BriefContent(props: BriefContentProps) {
 
-  const { isDarkMode } = useContext(ThemeContext);
+  const { isDarkMode } = useTheme();
 
   const briefRef = useRef<HTMLDivElement>(null);
 

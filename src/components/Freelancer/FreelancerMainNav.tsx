@@ -1,4 +1,4 @@
-import type { FreelancerNavProps } from '../../types/FreelancerNav';
+import type { FreelancerNavProps } from "../../types/FreelancerNav";
 import { Send, FileText, ChartNoAxesGantt, MessagesSquare, User, Settings } from 'lucide-react'
 import { useState } from "react";
 import useTheme from "../../hooks/useTheme";
