@@ -20,10 +20,7 @@ export default async function createClientAcc (email: string, organisation: stri
     if(errorCreateUser){
         console.log("createClientAcc - Couldn't create user",errorCreateUser)
         throw errorCreateUser
-    } else {
-        console.log("Data received")
-    }
-
+    } 
     const userId = data.user!.id
     
     if(!userId ){
@@ -38,9 +35,8 @@ export default async function createClientAcc (email: string, organisation: stri
     if(errorFetchInviteData){
         console.log("createClientAcc - Token does not match user's token",errorFetchInviteData)
         throw errorFetchInviteData
-    } else {
-        console.log("Data Fetched")
-    }
+    } 
+
     const firstName = fetchData![0].first_name
     const lastName = fetchData![0].last_name
     const freelancerId = fetchData![0].freelancer_id
@@ -60,9 +56,7 @@ export default async function createClientAcc (email: string, organisation: stri
     if(errorInsertClientData){
         console.log("createClientAcc - Could not insert user data", errorInsertClientData)
         throw errorInsertClientData
-    } else {
-        console.log("User data inserted")
-    }
+    } 
 
     const { error: errorClaimInvite } = await supabase
     .from('invite')
@@ -70,11 +64,8 @@ export default async function createClientAcc (email: string, organisation: stri
     .eq('token',token)
 
      if(errorClaimInvite){
-        console.log("createClientAcc - Couldn't update user details",errorClaimInvite)
-        throw errorClaimInvite
-    } else {
-        console.log("Data updated")
-    }
+        throw new Error("createClientAcc - Couldn't update user details",errorClaimInvite)
+    } 
     
 
    const { error: errorCreateConvo } = await supabase
@@ -88,8 +79,6 @@ export default async function createClientAcc (email: string, organisation: stri
     if(errorCreateConvo){
         console.log("createClientAcc - Couldn't assign conversation to user",errorCreateConvo)
         throw errorCreateConvo
-    } else {
-        console.log("Data inserted")
-    }
+    } 
 
 }
