@@ -1,14 +1,14 @@
-import type { FreelancerNav } from "../../types/FreelancerNav"
+import type { FreelancerNavProps } from '../../types/FreelancerNav';
 import { Send, FileText, ChartNoAxesGantt, MessagesSquare, User, Settings } from 'lucide-react'
-import { useState, useContext } from "react";
-import { ThemeContext } from "../../context/ThemeContext";
+import { useState } from "react";
+import useTheme from "../../hooks/useTheme";
 
 
 
-export default function MainNav({setActivePage, activePage}: FreelancerNav){
+export default function FreelancerMainNav({setActivePage, activePage}: FreelancerNavProps){
 
     const [hoveredItem, setHoveredItem] = useState<string | null>(null)
-    const {isDarkMode} = useContext(ThemeContext)
+    const {isDarkMode} = useTheme()
 
 
 const navItems = [{

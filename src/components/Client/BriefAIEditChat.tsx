@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ArrowUp } from "lucide-react";
 import callBriefUpdate from "../../lib/api/Client/callBriefUpdate";
 import { supabase } from "../../lib/supabaseClient";
-import { useUserData } from "../../hooks/useUserData";
+import { useClientData } from "../../hooks/useClientData";
 
 type BriefAIEditChatProps = {
   brief: string;
@@ -13,7 +13,7 @@ type BriefAIEditChatProps = {
 export default function BriefAIEditChat(props: BriefAIEditChatProps) {
   const [loading, setLoading] = useState(false);
   const [userInput, setUserInput] = useState("");
-  const { conversationId } = useUserData();
+  const { conversationId } = useClientData();
 
   async function handleSubmit() {
     const currentInput = userInput;

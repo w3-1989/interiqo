@@ -1,7 +1,7 @@
 import { supabase } from "../../supabaseClient";
 
 
-export default async function signIn (email: string, password:string){
+export default async function signInFreelancer (email: string, password:string){
             const {error:errorSigningIn} = await supabase.auth.signInWithPassword({
                 email: email,
                 password:password,

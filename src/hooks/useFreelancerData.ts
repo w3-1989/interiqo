@@ -3,7 +3,7 @@ import type { AuthError, PostgrestError } from "@supabase/supabase-js";
 import { supabase } from "../lib/supabaseClient";
 
 export const useFreelancerData = () => {
-    const [freelancer_id, setFreelancerId] = useState("")
+    const [freelancerId, setFreelancerId] = useState("")
     const [error, setError] = useState<AuthError | PostgrestError>();
 
 
@@ -39,6 +39,6 @@ export const useFreelancerData = () => {
   }, []);
 
 
-    return { freelancer_id, error };
+    return { freelancerId, error };
 
 }

@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 
 export default function useCheckUserType() {
-  const [userType, setUserType] = useState("");
+  const [userType, setUserType] = useState<"client" | "freelancer" | "">("")
+;
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const { data } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
 
       if (!session) {
         setUserType("");

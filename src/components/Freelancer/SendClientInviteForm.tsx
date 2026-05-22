@@ -13,7 +13,7 @@ export default function SendClientInvite (){
     const [email, setEmail] = useState("")
     const [emailSent, setEmailSent] = useState(false)
 
-    const {freelancer_id} = useFreelancerData()
+    const {freelancerId} = useFreelancerData()
 
     const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -38,8 +38,7 @@ export default function SendClientInvite (){
         
 
         try {
-            console.log({ freelancer_id, firstName, lastName, email })
-         await sendInvite(freelancer_id, firstName, lastName, email)
+         await sendInvite(freelancerId, firstName, lastName, email)
         setEmailSent(true)
 
         } catch (error) {

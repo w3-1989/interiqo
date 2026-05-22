@@ -1,12 +1,12 @@
-//Refactor!
 
-import { useState, useEffect, useContext, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import callDiscoveryChat from "../../lib/api/Client/callDiscoveryChat";
 import { supabase } from "../../lib/supabaseClient";
 import { useNavigate } from "react-router-dom";
-import { useUserData } from "../../hooks/useUserData";
+import { useClientData } from "../../hooks/useClientData";
 import DiamondLM from "../../assets/branding/Client/DiamondLM.svg?react";
 import DiamondDM from "../../assets/branding/Client/DiamondDM.svg?react";
+import fileTo64Base from "../../utils/fileTo64Base";
 import {
   FileUp,
   ArrowUp,
@@ -14,9 +14,9 @@ import {
   X,
   FileExclamationPoint,
 } from "lucide-react";
-import { ThemeContext } from "../../context/ThemeContext";
 import type { Messages } from "../../types/Messages";
 import type { FileUpload } from "../../types/FileUpload";
+import useTheme from "../../hooks/useTheme";
 
 const ALLOWED_MIME_TYPES = [
   "application/pdf",
@@ -46,9 +46,9 @@ export default function AIChatPanel(props: ChatInputBoxProps) {
   const [base64Files, setBase64Files] = useState<string[]>([]);
   const [files, setFiles] = useState<FileUpload[]>([]);
   const [displayedError, setDisplayedError] = useState("");
-  const { conversationId } = useUserData();
+  const { conversationId } = useClientData();
 
-  const { isDarkMode } = useContext(ThemeContext);
+  const { isDarkMode } = useTheme();
 
   const navigate = useNavigate();
 
@@ -172,19 +172,6 @@ export default function AIChatPanel(props: ChatInputBoxProps) {
     setBase64Files([...base64Files, base64]);
   }
 
-  function fileTo64Base(file: File): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        if (reader.result) {
-          const base64 = (reader.result as string).split(",")[1];
-          resolve(base64);
-        }
-      };
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-  }
 
   function removeFile(i: number) {
     setFiles(files.filter((_, pos) => pos !== i));
@@ -199,14 +186,14 @@ export default function AIChatPanel(props: ChatInputBoxProps) {
 
   return (
   <>
-    <div className="flex flex-row items-start gap-6 w-[780px]">
+    <div className="flex relative flex-row items-start gap-6 w-[780px]">
       
       {(props.displayedText || props.isStreaming) && (
-        <div className="pt-2">
+        <div className="pt-2 absolute -translate-x-[calc(44px+12px)]">
           {isDarkMode ? (
-            <DiamondDM className="min-h-[44px] min-w-[44px] h-11 w-auto drop-shadow-lg animate-float" />
+            <DiamondDM className=" min-h-[44px] min-w-[44px] h-11 w-auto drop-shadow-lg animate-float" />
           ) : (
-            <DiamondLM className="min-h-[44px] min-w-[44px] h-11 w-auto drop-shadow-lg animate-float" />
+            <DiamondLM className="  min-h-[44px] min-w-[44px] h-11 w-auto drop-shadow-lg animate-float" />
           )}
         </div>
       )}
@@ -242,7 +229,7 @@ export default function AIChatPanel(props: ChatInputBoxProps) {
           </div>
         </div>
 
-        <div className="shadow-[0_4px_120px_30px_rgba(88,5,255,0.1)] dark:shadow-[0_4px_120px_30px_rgba(88,5,255,0.2)] p-6 bg-white dark:bg-black min-h-[160px] flex flex-col justify-between gap-4">
+        <div className="w-[780px] shadow-[0_4px_120px_30px_rgba(88,5,255,0.1)] dark:shadow-[0_4px_120px_30px_rgba(88,5,255,0.2)] p-6 bg-white dark:bg-black min-h-[160px] flex flex-col justify-between gap-4">
           <textarea
             className="outline-none border-none resize-none bg-transparent dark:text-white text-[14px] leading-7"
             value={userInputValue}

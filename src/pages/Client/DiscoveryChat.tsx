@@ -1,16 +1,16 @@
 
 
-import { useContext, useState, useEffect } from "react";
-import TopBarSimple from "../../components/General/TopBarSimple";
+import { useState, useEffect } from "react";
+import TopBar from "../../components/Shared/TopBar";
 import Background from "../../assets/backgrounds/GeometricBG.svg?react";
 import DiamondLM from "../../assets/branding/Client/DiamondLM.svg?react";
 import DiamondDM from "../../assets/branding/Client/DiamondDM.svg?react";
-import { ThemeContext } from "../../context/ThemeContext";
-import { useUserData } from "../../hooks/useUserData";
-import TimeOfDayGreeting from "../../helpers/TimeOfDayGreeting";
+import { useClientData } from "../../hooks/useClientData";
+import TimeOfDayGreeting from "../../components/Shared/TimeOfDayGreeting";
 import AIChatPanel from "../../components/Client/AIChatPanel";
 import type { Messages } from "../../types/Messages";
 import { supabase } from "../../lib/supabaseClient";
+import useTheme from "../../hooks/useTheme";
 
 export default function DiscoveryChat() {
   const [chat, setChat] = useState<Messages[]>([]);
@@ -18,23 +18,23 @@ export default function DiscoveryChat() {
   const [displayedText, setDisplayedText] = useState("");
 
   const [textQueue, setTextQueue] = useState("");
-  const { isDarkMode } = useContext(ThemeContext);
-  const { clientName, conversationId } = useUserData();
+  const { isDarkMode } = useTheme();
+  const { clientName, conversationId } = useClientData();
   
 
   useEffect(() => {
     async function getUserConvo() {
 
       if(!conversationId){
-        return console.log("DiscoveryChat - No conversation Id found")
+        throw new Error("DiscoveryChat - No conversation Id found")
       }
-        const {data, error} = await supabase
+        const {data, error: errorGettingConvoId} = await supabase
         .from("messages")
         .select()
         .eq("conversation_id", conversationId)
 
         if(!data){
-          return console.log("DiscoveryChat - no data found", error)
+          throw new Error(`DiscoveryChat - no data found: ${errorGettingConvoId}`)
         }
 
         const chat = data.map((e) => ({
@@ -68,7 +68,7 @@ export default function DiscoveryChat() {
     <>
       <div className="h-screen flex flex-col dark:bg-interiqo-black-500">
         <Background className="absolute h-screen opacity-20" />
-        <TopBarSimple
+        <TopBar
         disableToggle={!!(displayedText || isStreaming || textQueue)}
         />
         <section className="flex-1 flex flex-col justify-center items-center">

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import type { AuthError, PostgrestError } from "@supabase/supabase-js";
 import { supabase } from "../lib/supabaseClient";
 
-export const useUserData = () => {
+export const useClientData = () => {
   const [conversationId, setConversationId] = useState(null);
   const [clientName, setClientName] = useState("");
   const [clientLastName, setClientLastName] = useState("")
@@ -44,7 +44,6 @@ export const useUserData = () => {
           );
           setError(errorSelectingConversationId);
         } else {
-          console.log("Conversation id assigned");
           setConversationId(conversationData![0].id);
         }
       } else {

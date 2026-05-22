@@ -29,7 +29,7 @@ Deno.serve(async (req) => {
     disagree, ask what needs changing and revise the summary before 
     asking for confirmation again. Only when the client confirms the 
     summary is correct should you end the conversation by telling 
-    them to click the Submit Project button. Include the exact text 
+    them to click the Generate brief button. Include the exact text 
     SUBMIT_PROJECT at the very end of your message but do not display 
     it or reference it in your response. Do not use dashes, em dashes, or 
     any punctuation for lists or emphasis. Write in plain flowing sentences only.`;

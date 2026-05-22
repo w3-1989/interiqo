@@ -1,4 +1,4 @@
-import TopBarSimple from "../../components/General/TopBarSimple";
+import TopBar from "../../components/Shared/TopBar";
 import Background from "../../assets/backgrounds/GeometricBG.svg?react";
 import forgotPassword from "../../lib/api/General/forgotPassword";
 import { useState } from "react";
@@ -30,7 +30,7 @@ export default function ForgotPassword() {
     <>
       <div className="h-screen dark:bg-black flex flex-col">
         <Background className="  h-screen absolute  opacity-20" />
-        <TopBarSimple />
+        <TopBar />
         <div className="flex justify-center items-center flex-1 -mt-34">
             { emailSent ? <div className="flex flex-col justify-center items-center ">
                     <svg width="240" height="240" viewBox="0 0 52 52">

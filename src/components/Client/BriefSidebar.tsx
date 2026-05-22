@@ -1,4 +1,4 @@
-import { useUserData } from "../../hooks/useUserData";
+import { useClientData } from "../../hooks/useClientData";
 import { Square } from "lucide-react";
 import { supabase } from "../../lib/supabaseClient";
 import { useNavigate } from "react-router-dom";
@@ -12,7 +12,7 @@ const projectMap = [
 
 export default function BriefSideBar() {
   const { companyName, clientName, clientLastName, conversationId } =
-    useUserData();
+    useClientData();
 
   const navigate = useNavigate();
 
@@ -24,7 +24,7 @@ export default function BriefSideBar() {
 
   async function handleBriefSubmit() {
     if (!conversationId) {
-      return console.log("No conversation ID found");
+      throw new Error("No conversation ID found");
     }
 
     const { error } = await supabase
@@ -33,7 +33,7 @@ export default function BriefSideBar() {
       .eq("conversation_id", conversationId);
 
     if (error) {
-      return console.log("Error updating brief status", error);
+      throw new Error("Error updating brief status", error);
     }
 
     navigate("/client-dashboard");

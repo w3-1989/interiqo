@@ -1,6 +1,8 @@
 import { createContext } from 'react'
 
-export const UserTypeContext = createContext({
-    userType: '',
-    loading: true
-})
+interface UserTypeContextType {
+    userType: "client" | "freelancer"| "",
+    loading: boolean
+}
+
+export const UserTypeContext = createContext<UserTypeContextType | null>(null)

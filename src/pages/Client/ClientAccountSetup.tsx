@@ -3,15 +3,13 @@ import { supabase } from "../../lib/supabaseClient";
 import { useEffect, useState } from "react";
 import createClientAcc from "../../lib/api/Client/createClientAcc"
 import passwordValidation from "../../utils/passwordValidation"
-import TopBarSimple from "../../components/General/TopBarSimple";
+import TopBar from "../../components/Shared/TopBar";
 import Background from "../../assets/backgrounds/GeometricBG.svg?react"
-import { X, Check, Lock} from "lucide-react"
+import PasswordRequirements from "../../components/Shared/PasswordRequirements";
+import { Lock} from "lucide-react"
 import clsx from "clsx";
 
-const passwordValidationStyle = {
-    default: "text-interiqo-black-200 text-sm",
-    passed: "text-green-400 text-sm"
-}
+
 
 const submitBtnStyles ={
     default: "flex min-h-[48px] cursor-pointer justify-center items-center  w-full bg-interiqo-purple-500 text-white py-2.5 text-sm font-DMSans  mt-1",
@@ -92,7 +90,7 @@ export default function ClientAccountSetup(){
     <>
     <div className="h-screen flex flex-col dark:bg-interiqo-black-500">
     <Background className="absolute  h-screen opacity-20"/>
-     <TopBarSimple/>
+     <TopBar/>
     <section className="h-screen flex flex-col justify-center items-center">
             <div className="h-full flex flex-col justify-center items-center -mt-16">
                  <div className="flex flex-col ">
@@ -130,38 +128,7 @@ export default function ClientAccountSetup(){
                         }}
                         className="flex-1 min-w-0 border-b border-black dark:border-white p-2 text-sm font-DMSans" 
                         type="password" />
-                        <div className="flex flex-col gap-2"> 
-                            <div className="flex flex-row items-center gap-2">
-                            {passwordCheck.minLength ? <Check size={15} color="#5805FF"/> : <X size={15} color="#4C4C4C"/> }
-                            <p className={clsx(
-                                passwordValidationStyle.default, 
-                                passwordCheck.minLength && passwordValidationStyle.passed
-                            )}>Minimum 8 characters</p>
-                            </div>
-
-                            <div className="flex flex-row items-center gap-2">
-                            {passwordCheck.containsNum ? <Check size={15} color="#5805FF"/> : <X size={15} color="#4C4C4C"/> }
-                            <p className={clsx(
-                                passwordValidationStyle.default, 
-                                passwordCheck.containsNum && passwordValidationStyle.passed
-                            )}>Must contain one number</p>
-                            </div>
-
-                            <div className="flex flex-row items-center gap-2">
-                            {passwordCheck.containsUppercaseLetter ? <Check size={15} color="#5805FF"/> : <X size={15} color="#4C4C4C"/> }
-                            <p className={clsx(
-                                passwordValidationStyle.default, 
-                                passwordCheck.containsUppercaseLetter && passwordValidationStyle.passed
-                            )}>Must contain one uppercase letter</p>
-                            </div>
-                            <div className="flex flex-row items-center gap-2">
-                            {passwordCheck.containsSpecialCharacter ? <Check size={15} color="#5805FF"/> : <X size={15} color="#4C4C4C"/> }
-                            <p className={clsx(
-                                passwordValidationStyle.default, 
-                                passwordCheck.containsSpecialCharacter && passwordValidationStyle.passed
-                            )}>Must contain one symbol</p>
-                            </div>
-                        </div>
+                        <PasswordRequirements passwordCheck={passwordCheck}/>
                       </label>      
                     <button 
                     className={clsx( Object.values(passwordCheck).every(value => value === true) 

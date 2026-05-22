@@ -1,5 +1,5 @@
 import TopBar from "../../components/Shared/TopBar"
-import MainNav from "../../components/Freelancer/MainNav"
+import FreelancerMainNav from "../../components/Freelancer/FreelancerMainNav"
 import SendClientInvite from "../../components/Freelancer/SendClientInviteForm"
 import Background from "../../assets/backgrounds/GeometricBG.svg?react"
 import { useState } from "react"
@@ -19,9 +19,9 @@ export default function FreelancerDashboard(){
         <>
         <section className=" relative h-screen flex flex-col dark:bg-interiqo-black-500">
         <Background className="absolute  h-screen opacity-20"/>
-        <TopBar/>
+        <TopBar showNotifications={true}/>
         {views[activePage]}
-        <MainNav
+        <FreelancerMainNav
         setActivePage = {setActivePage} 
         activePage={activePage}/>
         </section>

@@ -1,4 +1,4 @@
-import signIn from "../../lib/api/Freelancer/signInFreelancer";
+import signInFreelancer from "../../lib/api/Freelancer/signInFreelancer";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import clsx from "clsx";
@@ -15,7 +15,7 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      await signIn(email, password);
+      await signInFreelancer(email, password);
       if (toggle) {
         navigate("/freelancer-dashboard");
       } else if (!toggle) {

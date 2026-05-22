@@ -1,9 +1,9 @@
 import { supabase } from "../../supabaseClient";
 
 
-export default async function sendInvite (freelancer_id:string, firstName: string, lastName: string, email: string){
+export default async function sendInvite (freelancerId:string, firstName: string, lastName: string, email: string){
     const {error} = await supabase.functions.invoke("send-invite", {
-        body: {freelancer_id, firstName, lastName, email}
+        body: {freelancerId, firstName, lastName, email}
     })
 
     if(error){

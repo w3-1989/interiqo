@@ -1,4 +1,4 @@
-type contentBlock = {
+type ContentBlock = {
     type:string, 
     source:{type:string, file_id:string}
 }
@@ -6,5 +6,5 @@ type contentBlock = {
 
 export interface Messages  {
     role: "user" | "assistant",
-    content: string | contentBlock[]
+    content: string | ContentBlock[]
 }

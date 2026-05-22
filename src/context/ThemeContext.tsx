@@ -1,9 +1,10 @@
 import { createContext } from 'react'
 
-export const ThemeContext = createContext({
-  isDarkMode: false,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    setIsDarkMode: (_: boolean) => {}
-})
+interface ThemeContextType{
+  isDarkMode: boolean,
+  setIsDarkMode: (_: boolean) => void
+}
+
+export const ThemeContext = createContext<ThemeContextType | null>(null)
 
 

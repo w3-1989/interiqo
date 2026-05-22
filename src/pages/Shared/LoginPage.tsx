@@ -1,5 +1,5 @@
-import Login from "../../components/Shared/Login"
-import TopBarSimple from "../../components/General/TopBarSimple"
+import LoginForm from "../../components/Shared/LoginForm"
+import TopBar from "../../components/Shared/TopBar";
 import Background from "../../assets/backgrounds/GeometricBG.svg?react";
 
 export default function LoginPage(){
@@ -9,9 +9,9 @@ export default function LoginPage(){
         <>
         <div className="h-screen dark:bg-black">
         <Background className="  h-screen absolute  opacity-20" />
-        <TopBarSimple />
+        <TopBar />
         <div className="flex justify-center align-middle">
-         <Login/>
+         <LoginForm/>
         </div>
         </div>
         </>

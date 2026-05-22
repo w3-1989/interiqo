@@ -1,4 +1,4 @@
-import TopBarSimple from "../../components/General/TopBarSimple";
+import TopBar from "../../components/Shared/TopBar";
 import Background from "../../assets/backgrounds/GeometricBG.svg?react";
 import resetPassword from "../../lib/api/General/resetPassword";
 import { useState, useEffect, useRef } from "react";
@@ -40,7 +40,7 @@ export default function ResetPassword() {
     <>
       <div className="h-screen dark:bg-black flex flex-col">
         <Background className="  h-screen absolute  opacity-20" />
-        <TopBarSimple />
+        <TopBar />
         <div className="flex justify-center items-center flex-1 -mt-34">
           {passwordUpdated ? (
             <div className="mb-24 flex flex-col justify-center items-center align-middle">
