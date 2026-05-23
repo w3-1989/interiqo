@@ -1,5 +1,9 @@
 import { Navigate } from "react-router-dom";
 import useUserType from "../../hooks/useUserType";
+import Background from "../../assets/backgrounds/GeometricBG.svg?react";
+import DiamondLM from "../../assets/branding/Client/DiamondLM.svg?react";
+import DiamondDM from "../../assets/branding/Client/DiamondDM.svg?react";
+import useTheme from "../../hooks/useTheme";
 type ProtectedRouteProps = {
   children: React.ReactNode;
   requiredUserType: "freelancer" | "client";
@@ -10,7 +14,19 @@ export default function ProtectedRoutes({
   requiredUserType,
 }: ProtectedRouteProps) {
   const { userType, loading } = useUserType();
-  if (loading) return null;
+  const { isDarkMode } = useTheme();
+
+  if (loading)
+    return (
+      <div className="h-screen flex flex-col items-center justify-center dark:bg-interiqo-black-500">
+        <Background className="absolute left-0 top-0 h-screen opacity-20" />
+        {isDarkMode ? (
+          <DiamondDM className="h-20 w-auto drop-shadow-lg animate-float" />
+        ) : (
+          <DiamondLM className="h-20 w-auto drop-shadow-lg animate-float" />
+        )}
+      </div>
+    );
   if (userType === requiredUserType) return children;
   return <Navigate to="/login" />;
 }
