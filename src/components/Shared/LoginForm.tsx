@@ -85,7 +85,7 @@ export default function Login() {
             <div className="flex justify-between items-center">
               Password
               <Link
-                to="/forgotten-password"
+                to="/forgot-password"
                 className="text-interiqo-purple-400 text-xs font-DMSans"
               >
                 Forgot your password?
