@@ -20,7 +20,7 @@ export default function ConfirmProjectReport() {
       <div className="h-screen flex flex-col dark:bg-interiqo-black-500 ">
         <Background className="absolute h-screen opacity-20" />
         <TopBar />
-        <section className=" flex justify-center align-middle items-center max-w-[1088px] h-[700px] w-full mx-auto shadow-[0_4px_120px_30px_rgba(88,5,255,0.1)] dark:shadow-[0_4px_120px_30px_rgba(88,5,255,0.2)]  ">
+        <section className=" flex justify-center align-middle items-center max-w-[1088px] h-[640px] w-full mx-auto shadow-[0_4px_120px_30px_rgba(88,5,255,0.1)] dark:shadow-[0_4px_120px_30px_rgba(88,5,255,0.2)]  ">
           <div className="z-2 w-full h-full flex flex-row bg-white dark:bg-black border border-black/5 p-6 gap-4">
             <BriefContent brief={brief} setBrief={setBrief} title={title} />
             <BriefSideBar />
