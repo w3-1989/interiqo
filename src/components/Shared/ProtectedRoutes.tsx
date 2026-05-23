@@ -4,6 +4,7 @@ import Background from "../../assets/backgrounds/GeometricBG.svg?react";
 import DiamondLM from "../../assets/branding/Client/DiamondLM.svg?react";
 import DiamondDM from "../../assets/branding/Client/DiamondDM.svg?react";
 import useTheme from "../../hooks/useTheme";
+import TopBar from "./TopBar";
 type ProtectedRouteProps = {
   children: React.ReactNode;
   requiredUserType: "freelancer" | "client";
@@ -18,13 +19,16 @@ export default function ProtectedRoutes({
 
   if (loading)
     return (
-      <div className="h-screen flex flex-col items-center justify-center dark:bg-interiqo-black-500">
-        <Background className="absolute left-0 top-0 h-screen opacity-20" />
-        {isDarkMode ? (
-          <DiamondDM className="h-20 w-auto drop-shadow-lg animate-float" />
-        ) : (
-          <DiamondLM className="h-20 w-auto drop-shadow-lg animate-float" />
-        )}
+      <div className="h-screen flex flex-col dark:bg-interiqo-black-500">
+        <Background className="absolute h-screen opacity-20" />
+        <TopBar />
+        <section className="flex-1 flex items-center justify-center -mt-28">
+          {isDarkMode ? (
+            <DiamondDM className="h-20 w-auto drop-shadow-lg animate-float" />
+          ) : (
+            <DiamondLM className="h-20 w-auto drop-shadow-lg animate-float" />
+          )}
+        </section>
       </div>
     );
   if (userType === requiredUserType) return children;

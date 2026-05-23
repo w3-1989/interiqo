@@ -39,7 +39,7 @@ export default function Login() {
       <div className="flex flex-col justify-center items-center align-middle mt-16">
         <form
           onSubmit={handleSubmit}
-          className="flex w-[471.3px] flex-col gap-8 mt-4"
+          className="flex w-[471.3px] flex-col gap-8 mt-14"
         >
           <p className=" dark:text-white">Sign in as</p>
           <div
