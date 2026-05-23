@@ -19,21 +19,18 @@ export default function MainNav({
   navItems,
 }: MainNavProps) {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
-  const [navVisible, setNavVisible] = useState(false);
+  const [navVisible, setNavVisible] = useState(true);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    timerRef.current = setTimeout(() => {
-      setNavVisible(true);
-      timerRef.current = setTimeout(() => {
-        setNavVisible(false);
-      }, 2000);
-    }, 1500);
+  timerRef.current = setTimeout(() => {
+    setNavVisible(false);
+  }, 2000);
 
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-    };
-  }, []);
+  return () => {
+    if (timerRef.current) clearTimeout(timerRef.current);
+  };
+}, []);
 
   function renderNavItems() {
     return navItems.map((item) => {
