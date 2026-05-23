@@ -1,12 +1,10 @@
-
-import { useState } from "react";
-import useTheme from "../../hooks/useTheme";
-import { type LucideIcon } from "lucide-react"
+import { useState, useEffect, useRef } from "react";
+import { type LucideIcon } from "lucide-react";
 
 interface MainNavProps {
-  navItems: readonly navItem[],
-  activePage: string,
-  setActivePage: (page: string) => void
+  navItems: readonly navItem[];
+  activePage: string;
+  setActivePage: (page: string) => void;
 }
 
 interface navItem {
@@ -15,11 +13,25 @@ interface navItem {
   svg: LucideIcon;
 }
 
-export default function MainNav({ setActivePage, activePage, navItems }: MainNavProps) {
+export default function MainNav({
+  setActivePage,
+  activePage,
+  navItems,
+}: MainNavProps) {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
-  const { isDarkMode } = useTheme();
+  const [navVisible, setNavVisible] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  useEffect(() => {
+    timerRef.current = setTimeout(() => {
+      setNavVisible(true);
+    }, 5000);
 
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+      setNavVisible(false);
+    };
+  }, []);
 
   function renderNavItems() {
     return navItems.map((item) => {
@@ -52,13 +64,8 @@ export default function MainNav({ setActivePage, activePage, navItems }: MainNav
           >
             <Icon
               size={20}
-              color={
-                item.id === activePage || hoveredItem === item.id
-                  ? "white"
-                  : isDarkMode
-                    ? "white"
-                    : "black"
-              }
+              color="currentColor"
+              className={`${item.id === activePage || hoveredItem === item.id ? "text-white" : "text-black dark:text-white"}`}
             />
           </button>
         </div>
@@ -68,9 +75,33 @@ export default function MainNav({ setActivePage, activePage, navItems }: MainNav
 
   return (
     <>
-      <nav className="flex absolute gap-6 bottom-12 left-1/2 -translate-x-1/2  ">
+      <nav
+        onMouseEnter={() => {
+          if (timerRef.current) clearTimeout(timerRef.current);
+          setNavVisible(true);
+        }}
+        onMouseLeave={() => {
+          timerRef.current = setTimeout(() => {
+            setNavVisible(false);
+          }, 500);
+        }}
+        className={` ${navVisible ? "translate-y-0 opacity-100" : "translate-y-24 opacity-0"}
+      flex fixed gap-6 bottom-12 left-1/2 -translate-x-1/2 transition-all duration-500`}
+      >
         {renderNavItems()}
       </nav>
+      <div
+        className={`fixed bottom-0 left-0 w-full h-32 z-50 ${navVisible ? "pointer-events-none" : ""}`}
+        onMouseEnter={() => {
+          if (timerRef.current) clearTimeout(timerRef.current);
+          setNavVisible(true);
+        }}
+        onMouseLeave={() => {
+          timerRef.current = setTimeout(() => {
+            setNavVisible(false);
+          }, 500);
+        }}
+      />
     </>
   );
 }
