@@ -1,6 +1,8 @@
 import signInFreelancer from "../../lib/api/Freelancer/signInFreelancer";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+
 import clsx from "clsx";
 
 export default function Login() {
@@ -36,10 +38,10 @@ export default function Login() {
 
   return (
     <>
-      <div className="flex flex-col justify-center items-center align-middle mt-16">
+      <div className="flex flex-col justify-center items-center align-middle mt-14">
         <form
           onSubmit={handleSubmit}
-          className="flex w-[471.3px] flex-col gap-8 mt-14"
+          className="flex w-[471.3px] flex-col gap-8 mt-6"
         >
           <p className=" dark:text-white">Sign in as</p>
           <div
@@ -80,7 +82,15 @@ export default function Login() {
             </div>
           </label>
           <label className="flex flex-col gap-8 font-DMSans dark:text-white">
-            Password
+            <div className="flex justify-between items-center">
+              Password
+              <Link
+                to="/forgotten-password"
+                className="text-interiqo-purple-400 text-xs font-DMSans"
+              >
+                Forgot your password?
+              </Link>
+            </div>
             <input
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -89,6 +99,7 @@ export default function Login() {
               type="password"
             />
           </label>
+
           {error && (
             <p className="text-red-400 text-[12px]">
               Invalid email or password
@@ -106,12 +117,12 @@ export default function Login() {
         {toggle ? (
           <p className="text-sm font-DMSans mt-4 dark:text-white">
             Don't have an account?{" "}
-            <a
-              href="/freelancer-account-setup"
+            <Link
               className="text-interiqo-purple-400 cursor-pointer"
+              to="/freelancer-account-setup"
             >
               Create account
-            </a>
+            </Link>
           </p>
         ) : (
           <p className="text-sm font-DMSans mt-4 dark:text-white">
