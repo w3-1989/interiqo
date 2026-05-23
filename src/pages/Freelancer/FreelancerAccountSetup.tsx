@@ -1,19 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../lib/supabaseClient";
 import { useState } from "react";
+import TopBar from "../../components/Shared/TopBar";
+import Background from "../../assets/backgrounds/GeometricBG.svg?react"
 import createFreelancerAcc from "../../lib/api/Freelancer/createFreelancerAcc";
 import passwordValidation from "../../utils/passwordValidation";
 import PasswordRequirements from "../../components/Shared/PasswordRequirements";
 import clsx from "clsx";
 
 
-
-const submitBtnStyles = {
-  default:
-    "w-full bg-gray-400 text-white rounded-lg py-2.5 text-sm font-medium mt-1",
-  active:
-    "w-full bg-black text-white rounded-lg py-2.5 text-sm font-medium mt-1 ",
-};
+const submitBtnStyles ={
+    default: "flex min-h-[48px] cursor-pointer justify-center items-center  w-full bg-interiqo-purple-500 text-white py-2.5 text-sm font-DMSans  mt-1",
+    active: "flex min-h-[48px] cursor-pointer justify-center items-center  w-full bg-interiqo-purple-400 text-white py-2.5 text-sm font-DMSans mt-1"
+}
 
 export default function FreelancerAccountSetup() {
   const [firstName, setFirstName] = useState("");
@@ -21,8 +20,6 @@ export default function FreelancerAccountSetup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [doesEmailExist, setDoesEmailExist] = useState(false);
-  const [currentSpeciality, setCurrentSpeciality] = useState("");
-  const [specialities, setSpecialities] = useState<string[]>([]);
   const [passwordCheck, setPasswordCheck] = useState({
     minLength: false,
     containsNum: false,
@@ -54,75 +51,55 @@ export default function FreelancerAccountSetup() {
         firstName,
         lastName,
         email,
-        specialities,
         password,
       );
       return navigate("/freelancer-dashboard");
     }
   };
 
-  function renderTags() {
-    return specialities.map((i, index) => {
-      return <span key={index}> {i}</span>;
-    });
-  }
+ 
+
+
 
   return (
     <>
-      <section className="h-screen flex flex-col justify-center items-center bg-gray-100">
-        <div className="flex flex-col w-120 h-140 rounded-2xl gap-6 bg-white drop-shadow-md  p-5">
-          <div className="flex flex-col text-center mt-6">
-            <h1 className="text-2xl font-avant">Create your account</h1>
-            <p className="font-DMSans text-gray-400 ">
-              Please enter your details below
-            </p>
-          </div>
-          <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-            <div className="flex gap-2">
+    <div className="h-screen flex flex-col dark:bg-interiqo-black-500">
+    <Background className="absolute  h-screen opacity-20"/>
+     <TopBar/>
+      <section className="h-screen flex flex-col justify-center items-center">
+        <div className="h-full flex flex-col justify-center items-center -mt-20">
+          <form onSubmit={handleSubmit} className="flex w-[471.3px] flex-col gap-8">
+            <div className="flex gap-8">
+              <label className="flex flex-col gap-8 font-DMSans dark:text-white">First Name
               <input
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
-                placeholder="First name"
-                className="flex-1 min-w-0 border border-gray-200 rounded-lg p-2 text-sm"
+                className="flex-1 min-w-full  border-b border-black dark:border-white p-2 text-sm font-DMSans"
                 type="text"
               />
+              </label>
+              <label className="flex flex-col gap-8 font-DMSans dark:text-white">Last Name
               <input
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
-                placeholder="Last name"
-                className="flex-1 min-w-0 border border-gray-200 rounded-lg p-2 text-sm"
+                className="flex-1 min-w-full  border-b border-black dark:border-white p-2 text-sm font-DMSans"
                 type="text"
               />
+              </label>
             </div>
-
+            <label className="flex flex-col gap-8 font-DMSans dark:text-white">Email
             <input
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="john123@gmail.com"
-              className="flex-1 min-w-0 border border-gray-200 rounded-lg p-2 text-sm"
+              className="flex-1 min-w-full  border-b border-black dark:border-white p-2 text-sm font-DMSans"
               type="text"
             />
+            </label>
 
-            {doesEmailExist ? <p>Email already exists</p> : null}
-
-            <input
-              id="specialities"
-              value={currentSpeciality}
-              onChange={(e) => setCurrentSpeciality(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  setCurrentSpeciality("");
-                  setSpecialities([...specialities, currentSpeciality]);
-                }
-              }}
-              placeholder="Enter your specialities"
-              className="flex-1 min-w-0 border border-gray-200 rounded-lg p-2 text-sm"
-              type="text"
-            />
-
-            {renderTags()}
-
+            {doesEmailExist ? <p className="text-red-400 text-[12px]">Email already exists</p> : null}
+  
+            <label className="flex flex-col gap-8 font-DMSans dark:text-white">Password
             <input
               value={password}
               onChange={(e) => {
@@ -130,18 +107,15 @@ export default function FreelancerAccountSetup() {
                 setPasswordCheck(passwordValidation(e.target.value));
               }}
               placeholder="Create password"
-              className="w-full border border-gray-200 rounded-lg p-2 text-sm"
+              className="flex-1 min-w-full  border-b border-black dark:border-white p-2 text-sm font-DMSans"
               type="password"
             />
+            </label>
             <PasswordRequirements passwordCheck={passwordCheck} />
 
             <button
-              className={clsx(
-                Object.values(passwordCheck).every((value) => value === true) &&
-                  submitBtnStyles.active
-                  ? submitBtnStyles.active
-                  : submitBtnStyles.default,
-              )}
+              className={clsx( Object.values(passwordCheck).every(value => value === true) 
+                                      && submitBtnStyles.active ? submitBtnStyles.active : submitBtnStyles.default)}
               type="submit"
               disabled={
                 !Object.values(passwordCheck).every((value) => value === true)
@@ -152,6 +126,7 @@ export default function FreelancerAccountSetup() {
           </form>
         </div>
       </section>
+      </div>
     </>
   );
 }

@@ -2,24 +2,17 @@
 Future add - database transaction or a cleanup 
 function that deletes the auth user if subsequent steps fail
 */
-import type { Freelancer } from "../../../types/Freelancer";
 import { supabase } from "../../supabaseClient";
 
 export default async function createFreelancerAcc(
   firstName: string,
   lastName: string,
   email: string,
-  specialities: string[],
   password: string,
 ) {
   const { data, error: errorCreateUser } = await supabase.auth.signUp({
     email: email,
     password: password,
-    options: {
-      data: {
-        specialities: specialities,
-      },
-    },
   });
 
   if (errorCreateUser) {
@@ -30,7 +23,7 @@ export default async function createFreelancerAcc(
   const userId = data.user!.id;
 
   if (!userId) {
-    return console.log("user id cannot be found");
+    throw new Error("user id cannot be found");
   }
 
   const { error: errorInsertFreelancerData } = await supabase
@@ -40,10 +33,8 @@ export default async function createFreelancerAcc(
       first_name: firstName,
       last_name: lastName,
       email: email,
-      specialities: specialities,
     })
-    .select("id")
-    .returns<Freelancer[]>();
+
 
   if (errorInsertFreelancerData) {
     console.log(
