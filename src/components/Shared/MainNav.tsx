@@ -25,11 +25,13 @@ export default function MainNav({
   useEffect(() => {
     timerRef.current = setTimeout(() => {
       setNavVisible(true);
-    }, 5000);
+      timerRef.current = setTimeout(() => {
+        setNavVisible(false);
+      }, 2000);
+    }, 1500);
 
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
-      setNavVisible(false);
     };
   }, []);
 
