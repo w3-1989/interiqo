@@ -23,14 +23,23 @@ export default function MainNav({
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-  timerRef.current = setTimeout(() => {
-    setNavVisible(false);
-  }, 2000);
+    timerRef.current = setTimeout(() => {
+      setNavVisible(false);
+    }, 2000);
 
-  return () => {
-    if (timerRef.current) clearTimeout(timerRef.current);
-  };
-}, []);
+    function handleVisibilityChange() {
+      if (document.visibilityState === "hidden") {
+        if (timerRef.current) clearTimeout(timerRef.current);
+      }
+    }
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
 
   function renderNavItems() {
     return navItems.map((item) => {
