@@ -19,7 +19,7 @@ Deno.serve(async (req) => {
     console.log(req)
     const {message} = await req.json()
 
-    const system = `Generate a short 3-5 word project title based on this brief. Return only the title, nothing else.
+    const system = `Generate a short project title based on this brief. Return only the title, nothing else.
     `
 
     const res = await fetch('https://api.anthropic.com/v1/messages', {

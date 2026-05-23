@@ -93,8 +93,7 @@ export default function ClientAccountSetup(){
      <TopBar/>
     <section className="h-screen flex flex-col justify-center items-center">
             <div className="h-full flex flex-col justify-center items-center -mt-16">
-                 <div className="flex flex-col ">
-                </div>
+               
                 <form                     
                 onSubmit={handleSubmit} 
                 className="flex w-[471.3px] flex-col gap-8">

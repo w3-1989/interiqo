@@ -5,7 +5,7 @@ import Background from "../../assets/backgrounds/GeometricBG.svg?react"
 import { useState } from "react"
 
 export default function FreelancerDashboard(){
-    const [activePage, setActivePage ] = useState<'invite' | 'briefs' | 'projects' | 'chat' | 'profile' | 'settings'>('invite')
+const [activePage, setActivePage] = useState<string>('invite')
     
     const views = {
         invite: <SendClientInvite />,
@@ -20,7 +20,7 @@ export default function FreelancerDashboard(){
         <section className=" relative h-screen flex flex-col dark:bg-interiqo-black-500">
         <Background className="absolute  h-screen opacity-20"/>
         <TopBar showNotifications={true}/>
-        {views[activePage]}
+        {views[activePage as keyof typeof views]}
         <FreelancerMainNav
         setActivePage = {setActivePage} 
         activePage={activePage}/>

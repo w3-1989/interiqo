@@ -1,12 +1,11 @@
 // type NavPage =
-//   | "invite"
+//   | "home"
 //   | "briefs"
-//   | "projects"
 //   | "chat"
 //   | "profile"
 //   | "settings";
 
-export interface FreelancerNavProps {
+export interface ClientNavProps {
   activePage: string;
   setActivePage: (page: string) => void;
 }
