@@ -91,7 +91,6 @@ export default function FreelancerAccountSetup() {
             <input
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="john123@gmail.com"
               className="flex-1 min-w-full  border-b border-black dark:border-white p-2 text-sm font-DMSans"
               type="text"
             />
@@ -106,7 +105,6 @@ export default function FreelancerAccountSetup() {
                 setPassword(e.target.value);
                 setPasswordCheck(passwordValidation(e.target.value));
               }}
-              placeholder="Create password"
               className="flex-1 min-w-full  border-b border-black dark:border-white p-2 text-sm font-DMSans"
               type="password"
             />
