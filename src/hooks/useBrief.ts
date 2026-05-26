@@ -71,7 +71,7 @@ const [brief, setBrief] = useState("");
           .eq("conversation_id", conversationId![0].id);
 
       if (fetchExistingBrief && fetchExistingBrief.length > 0) {
-        setBrief(fetchExistingBrief[0].summary);
+        setBrief(fetchExistingBrief[0].content);
 
         setTitle(fetchExistingBrief[0].title);
         return;
@@ -137,7 +137,7 @@ const [brief, setBrief] = useState("");
         const { error: errorUpdatingBrief } = await supabase
           .from("briefs")
           .insert({
-            summary: briefResults,
+            content: briefResults,
             full_transcript: JSON.stringify(messages),
             conversation_id: conversationId![0].id,
             title: briefTitle,

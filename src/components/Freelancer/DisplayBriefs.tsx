@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { supabase } from "../../lib/supabaseClient";
 import { useFreelancerData } from "../../hooks/useFreelancerData";
 import type { Brief } from "../../types/Briefs";
+import callClaude from "../../lib/api/callClaude";
 export default function DisplayBriefs() {
-  // 1. Hold the briefs list in state
   const [briefList, setBriefList] = useState<Brief[]>([]);
+  const [briefSummary, setBriefSummary] = useState<string[]>([]);
   const { freelancerId } = useFreelancerData();
 
   useEffect(() => {
@@ -59,30 +60,60 @@ export default function DisplayBriefs() {
 
       if (errorGettingBriefData) throw new Error(errorGettingBriefData);
 
+      setBriefList(briefsData as Brief[]);
 
-      setBriefList(briefsData as Brief[]);;
+      for (let i = 0; i < briefsData.length; i++) {
+        if (!briefsData[i].summary) {
+          const res = await callClaude("generate-brief-summary", {
+            summary: briefsData[i].content,
+          });
+          console.log(briefsData[i].conversation_id)
+          const { error: errorInsertingData } = await supabase
+            .from("briefs")
+            .update({ summary: res })
+            .eq("conversation_id", briefsData[i].conversation_id);
+          if (errorInsertingData) {
+            return errorInsertingData;
+          }
+          console.log(errorInsertingData)
+          setBriefSummary((prev) => [...prev, res]);
+        } else {
+          setBriefSummary((prev) => [...prev, briefsData[i].summary]);
+        }
+      }
     }
     briefListData();
   }, [freelancerId]);
 
   function renderBriefs() {
-  return briefList.map((i, index) => {
-const client = i.conversations?.clients
-    return (
-      <div key={index} className=" z-2 flex flex-col w-[782px] gap-3 p-6 bg-white dark:bg-black border border-black/5 dark:shadow-[0_4px_120px_30px_rgba(88,5,255,0.2)]">
-        <div className="flex flex-row justify-between items-center">
-          <span className="text-sm text-interiqo-purple-400">{client?.organisation}</span>
-          <span className="text-sm text-interiqo-black-100">{new Date(i.created_at).toLocaleDateString()}</span>
+    return briefList.map((i, index) => {
+      const client = i.conversations?.clients;
+      return (
+        <div
+          key={index}
+          className=" z-2 flex flex-col w-[782px] gap-3 p-6 bg-white dark:bg-black border border-black/5 shadow-[0_0px_60px_15px_rgba(88,5,255,0.1)] dark:shadow-[0_0px_60px_15px_rgba(88,5,255,0.2)]"
+        >
+          <div className="flex flex-row justify-between items-center">
+            <span className="text-sm text-interiqo-purple-400">
+              {client?.organisation}
+            </span>
+            <span className="text-sm text-interiqo-black-100">
+              {new Date(i.created_at).toLocaleDateString()}
+            </span>
+          </div>
+          <h2 className="text-[31px] font-avant dark:text-white">
+            {client?.first_name} {client?.last_name}
+          </h2>
+          <p className="text-sm text-interiqo-black-100 line-clamp-3">
+            {briefSummary[index]}
+          </p>
+          <button className="flex items-center justify-center w-fit min-h-10 px-4 bg-white dark:bg-interiqo-black-400 border border-black/5 text-sm cursor-pointer dark:text-white">
+            See more
+          </button>
         </div>
-        <h2 className="text-[31px] font-avant dark:text-white">{client?.first_name} {client?.last_name}</h2>
-        <p className="text-sm text-interiqo-black-100 line-clamp-3">{i.summary}</p>
-        <button className="flex items-center justify-center w-fit min-h-10 px-4 bg-white dark:bg-interiqo-black-400 border border-black/5 text-sm cursor-pointer dark:text-white">
-          See more
-        </button>
-      </div>
-    );
-  });
-}
+      );
+    });
+  }
 
   if (briefList.length === 0) {
     return (
@@ -108,19 +139,4 @@ const client = i.conversations?.clients
       </section>
     </>
   );
-
-  // 3. Handle: loading / error / empty
-
-  // 4. Map over briefs — one card per brief
-  //    Each card: company name, client name, summary snippet,
-  //    timestamp, "see more" action
-
-  // 5. Return JSX:
-  //    - Wrap everything in a scrollable container
-  //    - If briefList is empty — show the empty state (already built?)
-  //    - If briefList has items — map over briefList and return a card for each:
-  //      - Top row: company name (left, purple) + formatted timestamp (right)
-  //      - Client full name as a heading
-  //      - Summary text truncated to 3 lines (line-clamp-3)
-  //      - "See more" button
 }

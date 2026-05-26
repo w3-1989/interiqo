@@ -31,7 +31,7 @@ export default function BriefAIEditChat(props: BriefAIEditChatProps) {
 
     const { error } = await supabase
       .from("briefs")
-      .update({ summary: newBrief })
+      .update({ content: newBrief })
       .eq("conversation_id", conversationId);
     if (error) {
       console.log("Error updating brief in db", error);

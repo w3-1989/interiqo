@@ -1,6 +1,7 @@
 export interface Brief {
     conversation_id: number
-    summary: string
+    content: string
+    summary: string,
     created_at: string
     title: string,
     status: string,
