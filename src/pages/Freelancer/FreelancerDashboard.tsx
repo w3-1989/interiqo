@@ -3,13 +3,14 @@ import FreelancerMainNav from "../../components/Freelancer/FreelancerMainNav"
 import SendClientInvite from "../../components/Freelancer/SendClientInviteForm"
 import Background from "../../assets/backgrounds/GeometricBG.svg?react"
 import { useState } from "react"
+import DisplayBriefs from "../../components/Freelancer/DisplayBriefs"
 
 export default function FreelancerDashboard(){
 const [activePage, setActivePage] = useState<string>('invite')
     
     const views = {
         invite: <SendClientInvite />,
-        briefs: <div>Briefs</div>,
+        briefs: <DisplayBriefs/>,
         projects: <div>Projects</div>,
         chat: <div>Chat</div>,
         profile: <div>Profile</div>,
