@@ -67,7 +67,6 @@ export default function DisplayBriefs() {
           const res = await callClaude("generate-brief-summary", {
             summary: briefsData[i].content,
           });
-          console.log(briefsData[i].conversation_id)
           const { error: errorInsertingData } = await supabase
             .from("briefs")
             .update({ summary: res })
@@ -75,7 +74,6 @@ export default function DisplayBriefs() {
           if (errorInsertingData) {
             return errorInsertingData;
           }
-          console.log(errorInsertingData)
           setBriefSummary((prev) => [...prev, res]);
         } else {
           setBriefSummary((prev) => [...prev, briefsData[i].summary]);
