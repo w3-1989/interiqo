@@ -26,7 +26,7 @@ export default function DiscoveryChat() {
     async function getUserConvo() {
 
       if(!conversationId){
-        throw new Error("DiscoveryChat - No conversation Id found")
+        if(!conversationId) return
       }
         const {data, error: errorGettingConvoId} = await supabase
         .from("messages")
