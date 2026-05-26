@@ -4,7 +4,19 @@ import Background from "../../assets/backgrounds/GeometricBG.svg?react"
 import { useState } from "react"
 
 export default function ClientDashboard(){
-    const [activePage, setActivePage ] = useState<string>('home')
+    const [activePage, setActivePage ] = useState(() => {
+        const result = localStorage.getItem("client-active-page")
+        if(!result){
+            return'home'
+        } else {
+            return result
+        }
+    })
+
+    function handlePageChange(page: string){
+        localStorage.setItem("client-active-page", page)
+        setActivePage(page)
+    }
     
     const views = {
         home: <div>Home</div>,
@@ -20,7 +32,7 @@ export default function ClientDashboard(){
         <TopBar showNotifications={true}/>
         {views[activePage as keyof typeof views]}
         <ClientMainNav
-        setActivePage = {setActivePage} 
+        setActivePage = {handlePageChange} 
         activePage={activePage}/>
         </section>
         </>
