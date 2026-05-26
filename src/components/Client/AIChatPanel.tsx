@@ -55,13 +55,15 @@ export default function AIChatPanel(props: ChatInputBoxProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (props.textQueue.length === 0) return;
-    const interval = setInterval(() => {
-      props.setDisplayedText((prev) => prev + props.textQueue[0]);
-      props.setTextQueue((prev) => prev.slice(1));
-    }, 15);
-    return () => clearInterval(interval);
-  }, [props.textQueue]);
+  function handleVisibilityChange() {
+    if (document.hidden) {
+      props.setDisplayedText((prev) => prev + props.textQueue);
+      props.setTextQueue("");
+    }
+  }
+  document.addEventListener("visibilitychange", handleVisibilityChange);
+  return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
+}, [props.textQueue]);
 
   async function handleResponseSubmit() {
     const currentInput = userInputValue;
