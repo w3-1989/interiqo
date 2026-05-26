@@ -11,8 +11,7 @@ export default function DisplayBriefs() {
     async function briefListData() {
       const { data: clientData, error: errorGettingClientData } = await supabase
         .from("clients")
-        .select()
-        .eq("freelancer_id", freelancerId);
+        .select();
 
       if (!clientData) {
         throw new Error("No client data");
@@ -40,7 +39,18 @@ export default function DisplayBriefs() {
 
       const { data: briefsData, error: errorGettingBriefData } = await supabase
         .from("briefs")
-        .select()
+        .select(
+          `
+  *,
+  conversations(
+    clients(
+      first_name,
+      last_name,
+      organisation
+    )
+  )
+`,
+        )
         .in("conversation_id", conversationId);
 
       if (!briefsData) {
@@ -49,21 +59,32 @@ export default function DisplayBriefs() {
 
       if (errorGettingBriefData) throw new Error(errorGettingBriefData);
 
-      setBriefList(briefsData);
+
+      setBriefList(briefsData as Brief[]);;
     }
     briefListData();
   }, [freelancerId]);
 
+  function renderBriefs() {
+  return briefList.map((i, index) => {
+const client = i.conversations?.clients
+    return (
+      <div key={index} className=" z-2 flex flex-col w-[782px] gap-3 p-6 bg-white dark:bg-black border border-black/5 dark:shadow-[0_4px_120px_30px_rgba(88,5,255,0.2)]">
+        <div className="flex flex-row justify-between items-center">
+          <span className="text-sm text-interiqo-purple-400">{client?.organisation}</span>
+          <span className="text-sm text-interiqo-black-100">{new Date(i.created_at).toLocaleDateString()}</span>
+        </div>
+        <h2 className="text-[31px] font-avant dark:text-white">{client?.first_name} {client?.last_name}</h2>
+        <p className="text-sm text-interiqo-black-100 line-clamp-3">{i.summary}</p>
+        <button className="flex items-center justify-center w-fit min-h-10 px-4 bg-white dark:bg-interiqo-black-400 border border-black/5 text-sm cursor-pointer dark:text-white">
+          See more
+        </button>
+      </div>
+    );
+  });
+}
 
-  function renderBriefs(){
-    return briefList.map((i,index) => {
-        return (
-            <span key={index}>{i.summary}</span>
-        )
-    })
-  }
-
-  if (briefList.length === 0 ) {
+  if (briefList.length === 0) {
     return (
       <>
         <section className="flex flex-col justify-center  h-screen -mt-16 ">
@@ -78,15 +99,15 @@ export default function DisplayBriefs() {
         </section>
       </>
     );
-  } 
+  }
 
   return (
     <>
+      <section className="flex flex-col items-center overflow-y-auto h-screen pt-16 gap-4">
         {renderBriefs()}
+      </section>
     </>
-  )
-
-
+  );
 
   // 3. Handle: loading / error / empty
 
