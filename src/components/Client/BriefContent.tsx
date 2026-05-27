@@ -4,14 +4,11 @@ When multi-project support is added, the conversation_id should be passed
 as a URL param from DiscoveryChat to ensure the correct conversation brief
 is generated and stored.
 */
-
+import LoadingState from "../Shared/LoadingState";
 import ReactMarkdown from "react-markdown";
 import { useRef, useState } from "react";
 import { FileDown } from "lucide-react";
 import BriefAIEditChat from "../../components/Client/BriefAIEditChat";
-import DiamondLM from "../../assets/branding/Client/DiamondLM.svg?react";
-import DiamondDM from "../../assets/branding/Client/DiamondDM.svg?react";
-import useTheme from "../../hooks/useTheme";
 
 type BriefContentProps = {
   brief: string;
@@ -21,7 +18,6 @@ type BriefContentProps = {
 
 export default function BriefContent(props: BriefContentProps) {
 
-  const { isDarkMode } = useTheme();
 
   const briefRef = useRef<HTMLDivElement>(null);
 
@@ -36,13 +32,7 @@ export default function BriefContent(props: BriefContentProps) {
   }
 
   if (!props.brief) return (
-  <div className="w-[611px] h-full flex items-center justify-center">
-    {isDarkMode ? (
-      <DiamondDM className="h-20 w-auto drop-shadow-lg animate-float" />
-    ) : (
-      <DiamondLM className="h-20 w-auto drop-shadow-lg animate-float" />
-    )}
-  </div>
+        <LoadingState/>
 );
 
   return (

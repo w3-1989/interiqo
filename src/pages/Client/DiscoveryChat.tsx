@@ -11,6 +11,7 @@ import AIChatPanel from "../../components/Client/AIChatPanel";
 import type { Messages } from "../../types/Messages";
 import { supabase } from "../../lib/supabaseClient";
 import useTheme from "../../hooks/useTheme";
+import LoadingState from "../../components/Shared/LoadingState";
 
 export default function DiscoveryChat() {
   const [chat, setChat] = useState<Messages[]>([]);
@@ -54,14 +55,7 @@ export default function DiscoveryChat() {
 
   if (!clientName)
     return (
-      <div className="h-screen flex flex-col items-center justify-center dark:bg-interiqo-black-500">
-        <Background className="absolute left-0 top-0 h-screen opacity-20" />
-        {isDarkMode ? (
-          <DiamondDM className="h-20 w-auto drop-shadow-lg animate-float" />
-        ) : (
-          <DiamondLM className="h-20 w-auto drop-shadow-lg animate-float" />
-        )}
-      </div>
+      <LoadingState/>
     );
 
   return (
