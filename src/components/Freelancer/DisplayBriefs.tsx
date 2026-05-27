@@ -85,28 +85,33 @@ export default function DisplayBriefs() {
 
   function renderBriefs() {
     return briefList.map((i, index) => {
+      const daysSinceSubmission =
+        (new Date().getTime() - new Date(i.created_at).getTime()) / 86400000;
+      const days = Math.floor(daysSinceSubmission);
       const client = i.conversations?.clients;
       return (
         <div
           key={index}
-          className=" z-2 flex flex-col w-[782px] gap-3 p-6 bg-white dark:bg-black border border-black/5 shadow-[0_0px_60px_15px_rgba(88,5,255,0.1)] dark:shadow-[0_0px_60px_15px_rgba(88,5,255,0.2)]"
+          className=" z-2 flex flex-col w-[782px]  p-6 bg-white dark:bg-black border border-black/5 dark:border-interiqo-black-100/20"
         >
           <div className="flex flex-row justify-between items-center">
-            <span className="text-sm text-interiqo-purple-400">
+            <span className="text-[19px] text-interiqo-purple-400">
               {client?.organisation}
             </span>
             <span className="text-sm text-interiqo-black-100">
-              {new Date(i.created_at).toLocaleDateString()}
+              {days === 0
+                ? "today"
+                : `${days} ${days === 1 ? "day ago" : "days ago"}`}
             </span>
           </div>
           <h2 className="text-[31px] font-avant dark:text-white">
             {client?.first_name} {client?.last_name}
           </h2>
-          <p className="text-sm text-interiqo-black-100 line-clamp-3">
+          <p className="text-sm text-interiqo-black-100 mb-8 ">
             {briefSummary[index]}
           </p>
           <button className="flex items-center justify-center w-fit min-h-10 px-4 bg-white dark:bg-interiqo-black-400 border border-black/5 text-sm cursor-pointer dark:text-white">
-            See more
+            View brief
           </button>
         </div>
       );
