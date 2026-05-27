@@ -16,6 +16,5 @@ export default async function callClaude(edgeFunction: string, body:Record<strin
         console.log(data)
         throw new Error("callClaude - Empty response from edge function")
     }
-
     return data.content[0].text
 }

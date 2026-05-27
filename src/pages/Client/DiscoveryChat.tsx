@@ -1,5 +1,3 @@
-
-
 import { useState, useEffect } from "react";
 import TopBar from "../../components/Shared/TopBar";
 import Background from "../../assets/backgrounds/GeometricBG.svg?react";
@@ -21,69 +19,64 @@ export default function DiscoveryChat() {
   const [textQueue, setTextQueue] = useState("");
   const { isDarkMode } = useTheme();
   const { clientName, conversationId } = useClientData();
-  
 
   useEffect(() => {
     async function getUserConvo() {
-
-      if(!conversationId){
-        if(!conversationId) return
+      if (!conversationId) {
+        if (!conversationId) return;
       }
-        const {data, error: errorGettingConvoId} = await supabase
+      const { data, error: errorGettingConvoId } = await supabase
         .from("messages")
         .select()
-        .eq("conversation_id", conversationId)
+        .eq("conversation_id", conversationId);
 
-        if(!data){
-          throw new Error(`DiscoveryChat - no data found: ${errorGettingConvoId}`)
-        }
-
-        const chat = data.map((e) => ({
-          role: e.role,
-          content: e.content 
-        }))
-
-      setChat(chat)
-      if (chat.length > 0) {
-        setDisplayedText(chat[chat.length - 1].content as string)
+      if (!data) {
+        throw new Error(
+          `DiscoveryChat - no data found: ${errorGettingConvoId}`,
+        );
       }
-   }
-    getUserConvo()
 
-  }, [conversationId])
+      const chat = data.map((e) => ({
+        role: e.role,
+        content: e.content,
+      }));
 
+      setChat(chat);
+      if (chat.length > 0) {
+        const lastAssistantMessage = [...chat]
+          .reverse()
+          .find((m) => m.role === "assistant");
+        if (lastAssistantMessage) {
+          setDisplayedText(lastAssistantMessage.content as string);
+        }
+      }
+    }
+    getUserConvo();
+  }, [conversationId]);
 
-  if (!clientName)
-    return (
-      <LoadingState/>
-    );
+  if (!clientName) return <LoadingState />;
 
   return (
     <>
       <div className="h-screen flex flex-col dark:bg-interiqo-black-500">
         <Background className="absolute h-screen opacity-20" />
-        <TopBar
-        disableToggle={!!(displayedText || isStreaming || textQueue)}
-        />
+        <TopBar disableToggle={!!(displayedText || isStreaming || textQueue)} />
         <section className="flex-1 flex flex-col justify-center items-center">
           <div className="flex flex-col items-center gap-2 -mt-16">
             <div
               className={`transition-opacity duration-700 ${clientName ? "opacity-100" : "opacity-0"} absolute top-1/2 left-1/2 -translate-x-1/2 top-[35%] flex flex-row items-center gap-6`}
             >
-            
-            
-
-              {chat.length === 0 && !isStreaming ? clientName && 
-
-              <>
-              {isDarkMode ? (
-                <DiamondDM className="h-20 mb-4 w-auto drop-shadow-lg animate-float" />
-              ) : (
-                <DiamondLM className="h-20 w-auto mb-4 drop-shadow-lg animate-float" />
-              )}
-                <TimeOfDayGreeting name={clientName} />
-              </>
-              
+              {chat.length === 0 && !isStreaming
+                ? clientName && (
+                    <>
+                      {isDarkMode ? (
+                        <DiamondDM className="h-20 mb-4 w-auto drop-shadow-lg animate-float" />
+                      ) : (
+                        <DiamondLM className="h-20 w-auto mb-4 drop-shadow-lg animate-float" />
+                      )}
+                      <TimeOfDayGreeting name={clientName} />
+                    </>
+                  )
                 : null}
             </div>
 

@@ -55,15 +55,13 @@ export default function AIChatPanel(props: ChatInputBoxProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-  function handleVisibilityChange() {
-    if (document.hidden) {
-      props.setDisplayedText((prev) => prev + props.textQueue);
-      props.setTextQueue("");
-    }
-  }
-  document.addEventListener("visibilitychange", handleVisibilityChange);
-  return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
-}, [props.textQueue]);
+    if (props.textQueue.length === 0) return;
+    const interval = setInterval(() => {
+      props.setDisplayedText((prev) => prev + props.textQueue[0]);
+      props.setTextQueue((prev) => prev.slice(1));
+    }, 15);
+    return () => clearInterval(interval);
+  }, [props.textQueue]);
 
   async function handleResponseSubmit() {
     const currentInput = userInputValue;
@@ -231,7 +229,7 @@ export default function AIChatPanel(props: ChatInputBoxProps) {
           </div>
         </div>
 
-        <div className="w-[780px] shadow-[0_4px_120px_30px_rgba(88,5,255,0.1)] dark:shadow-[0_4px_120px_30px_rgba(88,5,255,0.2)] p-6 bg-white dark:bg-black min-h-[160px] flex flex-col justify-between gap-4">
+        <div className="w-[780px] border border-black/5 dark:border-interiqo-black-100/10 shadow-[0_4px_120px_30px_rgba(88,5,255,0.1)] dark:shadow-[0_4px_120px_30px_rgba(88,5,255,0.2)] p-6 bg-white dark:bg-black min-h-[160px] flex flex-col justify-between gap-4">
           <textarea
             className="outline-none border-none resize-none bg-transparent dark:text-white text-[14px] leading-7"
             value={userInputValue}
