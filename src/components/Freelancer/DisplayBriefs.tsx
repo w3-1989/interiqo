@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../../lib/supabaseClient";
 import { useFreelancerData } from "../../hooks/useFreelancerData";
+import LoadingState from "../Shared/LoadingState";
 import type { Brief } from "../../types/Briefs";
 import callClaude from "../../lib/api/callClaude";
 export default function DisplayBriefs() {
   const [briefList, setBriefList] = useState<Brief[]>([]);
   const [briefSummary, setBriefSummary] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true)
   const { freelancerId } = useFreelancerData();
 
   useEffect(() => {
@@ -79,6 +81,7 @@ export default function DisplayBriefs() {
           setBriefSummary((prev) => [...prev, briefsData[i].summary]);
         }
       }
+      setLoading(false)
     }
     briefListData();
   }, [freelancerId]);
@@ -117,6 +120,7 @@ export default function DisplayBriefs() {
       );
     });
   }
+  if(loading)return <LoadingState />
 
   if (briefList.length === 0) {
     return (
