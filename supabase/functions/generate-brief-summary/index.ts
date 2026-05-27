@@ -23,7 +23,9 @@ Deno.serve(async (req) => {
     given a project brief and your job is to distil it into a single, clear 
     sentence that gives the freelancer an immediate understanding of the project 
     at a glance — before they open the full brief. Be concise, specific and 
-    professional. No preamble, no filler.`
+    professional. No preamble, no filler. Do not use bullet points, dashes, 
+    bold, italic, or any other markdown formatting it must be written in plain 
+    english`
 
     const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
