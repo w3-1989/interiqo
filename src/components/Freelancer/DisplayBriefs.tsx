@@ -4,11 +4,15 @@ import { useFreelancerData } from "../../hooks/useFreelancerData";
 import LoadingState from "../Shared/LoadingState";
 import type { Brief } from "../../types/Briefs";
 import callClaude from "../../lib/api/callClaude";
+import { useNavigate } from "react-router-dom";
+
 export default function DisplayBriefs() {
   const [briefList, setBriefList] = useState<Brief[]>([]);
   const [briefSummary, setBriefSummary] = useState<string[]>([]);
   const [loading, setLoading] = useState(true)
   const { freelancerId } = useFreelancerData();
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     async function briefListData() {
@@ -86,6 +90,10 @@ export default function DisplayBriefs() {
     briefListData();
   }, [freelancerId]);
 
+  function handleClick(id : number){
+    navigate(`/brief/${id}`)
+  }
+
   function renderBriefs() {
     return briefList.map((i, index) => {
       const daysSinceSubmission =
@@ -113,7 +121,9 @@ export default function DisplayBriefs() {
           <p className="text-sm text-interiqo-black-100 mb-8 ">
             {briefSummary[index]}
           </p>
-          <button className="flex items-center justify-center w-fit min-h-10 px-4 bg-white dark:bg-interiqo-black-400 border border-black/5 text-sm cursor-pointer dark:text-white">
+          <button 
+          onClick={() => handleClick(i.id)}
+          className="flex items-center justify-center w-fit min-h-10 px-4 bg-white dark:bg-interiqo-black-400 border border-black/5 text-sm cursor-pointer dark:text-white">
             View brief
           </button>
         </div>

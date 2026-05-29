@@ -25,7 +25,7 @@ Deno.serve(async (req) => {
     at a glance — before they open the full brief. Be concise, specific and 
     professional. No preamble, no filler. Do not use bullet points, dashes, 
     bold, italic, or any other markdown formatting it must be written in plain 
-    english`
+    english and keep the response to no more than a single sentences`
 
     const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
