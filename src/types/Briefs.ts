@@ -5,6 +5,8 @@ export interface Brief {
     created_at: string
     title: string,
     status: string,
+    id: number,
+    full_transcript: string,
     conversations: {
         clients: {
             first_name: string

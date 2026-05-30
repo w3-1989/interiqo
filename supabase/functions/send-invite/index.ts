@@ -17,7 +17,6 @@ const supabase:SupabaseClient = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE
 
 
 Deno.serve(async (req) => {
-  // This is needed if you're planning to invoke your function from a browser.
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
