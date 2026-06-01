@@ -12,7 +12,7 @@ export default function BriefDetailPage() {
   const [briefData, setBriefData] = useState<Brief | null>(null);
 
   const params = useParams();
-const navigate = useNavigate()
+  const navigate = useNavigate();
   useEffect(() => {
     async function getBrief() {
       const { data: brief, error: errorFetchingBrief } = await supabase
@@ -45,11 +45,19 @@ const navigate = useNavigate()
     getBrief();
   }, []);
 
+  function handleClick() {
+    if (!briefData) return;
+    navigate(`/plan/${briefData.id}`);
+  }
+
   return (
     <>
       <section className="flex flex-col h-screen dark:bg-black overflow-hidden">
         <TopBar showNotifications={true} />
-        <button className="flex items-center gap-1 text-[12px] font-DMSans dark:text-white cursor-pointer px-4 pb-2" onClick={() => navigate(-1)}>
+        <button
+          className="flex items-center gap-1 text-[12px] font-DMSans dark:text-white cursor-pointer px-4 pb-2"
+          onClick={() => navigate(-1)}
+        >
           <ChevronLeft />
         </button>
         <div className="flex flex-1 p-4 gap-4 min-h-0">
@@ -75,7 +83,10 @@ const navigate = useNavigate()
               </ReactMarkdown>
             </div>
             <div className="flex flex-row justify-between pt-3 border-t border-black/5">
-              <button className="flex items-center justify-center p-3 w-fit min-h-[38px] bg-interiqo-purple-400 text-[12px]  text-white  cursor-pointer border border-black/10">
+              <button
+                onClick={handleClick}
+                className="flex items-center justify-center p-3 w-fit min-h-[38px] bg-interiqo-purple-400 text-[12px]  text-white  cursor-pointer border border-black/10"
+              >
                 Create Plan
               </button>
               <button className="flex items-center justify-center p-3 w-fit min-h-[38px] bg-white dark:bg-interiqo-black-400 text-[12px] text-black dark:text-white cursor-pointer border border-black/10">

@@ -17,6 +17,7 @@ import LoginPage from "./pages/Shared/LoginPage.tsx";
 import ForgotPassword from "./pages/Shared/ForgotPassword.tsx"
 import ResetPassword from "./pages/Shared/ResetPassword.tsx";
 import BriefDetailPage from "./pages/Freelancer/BriefDetailPage.tsx";
+import PlanBuilderPage from "./pages/Freelancer/PlanBuilderPage.tsx";
 
 const router = createBrowserRouter([
   { path: "/", element: <App /> },
@@ -25,6 +26,14 @@ const router = createBrowserRouter([
   { path: "/login", element: <LoginPage /> },
   {path: "/forgot-password", element:<ForgotPassword/>},
   {path: "/reset-password", element: <ResetPassword/>},
+   {
+    path: "/plan/:id",
+    element: (
+      <ProtectedRoutes requiredUserType="freelancer">
+        <PlanBuilderPage />
+      </ProtectedRoutes>
+    ),
+  },
   {
     path: "/brief/:id",
     element: (
